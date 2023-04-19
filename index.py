@@ -23,6 +23,9 @@ def login():
 def paginaderegistro():
     return render_template('paginaderegistro.html')
     
+@app.route('/cerrarseion')
+def cerrarsesion():
+    return render_template('cerrarsesion.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
