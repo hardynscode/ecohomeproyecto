@@ -15,5 +15,14 @@ def periodo():
 def factura():
     return render_template('factura.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/paginaderegistro')
+def paginaderegistro():
+    return render_template('paginaderegistro.html')
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
