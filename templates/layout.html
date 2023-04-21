@@ -6,8 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eco Home Admin</title>
+
     <!-- Ruta estilos -->
     <link rel="stylesheet" href="/static/css/main.css">
+
     <!-- Plantilla bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -15,41 +17,92 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">EcoHome</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!--topbar -->
+    <div class="container-fluid bg-light d-none d-lg-block">
+        <div class="row py-2 px-lg-5">
+            <div class="col-lg-6 text-left mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center">
+                    <small><i class="fa fa-phone-alt mr-2"></i>Proyecto</small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+    <!-- Navbar Star -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+            <a href="home" class="navbar-brand ml-lg-3">
+                <h1 class="m-0 text-primary"><span class="text-dark">Eco</span> Home</h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto ms-auto" >
+                <ul class="navbar-nav ml-auto ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('periodo') }}">Periodo</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('factura') }}">Factura</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('paginaderegistro') }}">Pagina de Registro</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('cerrarsesion') }}">Cerrar sesion</a>
-                    </li>
-                        </ul>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Paginas</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="factura" class="dropdown-item">Factura</a>
+                            <a href="periodo" class="dropdown-item">periodo</a>
+                        </div>
+
+                    </div>
+                    <a href="dcontacto" class="btn btn-primary d-none d-lg-block">Config</a>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!--  Navbar Star End-->
+
+
+    <!-- Services -->
+    <div class="section section-white">
+        <div class="service-item position-relative">
+            <div class="service-text text-center">
+                <h4 class="text-dark e font-weight-medium px-3">CASA</h4>
+                <p class="text-dark px-3 mb-3">Seleccione la casa que desea visualizar</p>
             </div>
         </div>
-    </nav>
 
-    {% block content %}
-    {% endblock %}
-    
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <img class="img-fluid" src="../img/eco-house-logo.png" alt="">
+                    <div class="service-wrapper">
+                        <i class="icon-home"></i>
+                        <h3>Casa N° 1</h3>
+                        <p>Sobrenombre</p>
+                        <a href="#" class="btn">Ver</a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="service-wrapper">
+                        <i class="icon-briefcase"></i>
+                        <h3>Casa N°2</h3>
+                        <p>Sobrenombre</p>
+                        <a href="#" class="btn">Ver</a>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="service-wrapper">
+                        <i class="icon-calendar"></i>
+                        <h3>Casa N° 3</h3>
+                        <p>Sobrenombre</p>
+                        <a href="#" class="btn">Ver</a>
+                    </div>
+                </div>
+                <a href="addhome" class="btn btn-primary d-none d-lg-block">Agregar una nueva casa</a>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
