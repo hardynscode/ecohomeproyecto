@@ -1,64 +1,63 @@
-{% extends "layout.html"%}
-{% block content %}
+{% extends "layout.html" %}
 
+{% block content %}
+<div class="service-item position-relative">
+    <div class="service-text text-center">
+        <h4 class="text-dark e font-weight-medium px-3">Seleccione la casa que desea visualizar</h4>
+       
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" id="houses-container">
+        Cargando...
+    </div>
+    <div class="row" style="margin-top: 30px;">
+        <a href="addhome" class="btn btn-primary d-lg-block pt-1">Agregar una nueva casa</a>
+    </div>
+</div>
 {% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block scripts %}
+<script type="text/javascript">
+    
+    $(document).ready(function () {
+        
+        const cedula = 1098313090;
 
-<head>
+        $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:5000/api/users/"+cedula+"/houses",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          async: true,
+          success: function (response) {
+            
+            const houses = response;
+            let content = "";
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+            for (let index = 0; index < houses.length; index++) {
+                const home = houses[index];
 
-    <title>EcoHome</title>
+                content += "<div class='col-md-4 col-sm-6'> "+
+                                "<img class='img-fluid' src='../img/eco-house-logo.png' alt=''>"+
+                                "<div class='service-wrapper'>"+
+                                    "<i class='icon-home'></i>"+
+                                    "<h3>Casa N° "+(index + 1)+"</h3>"+
+                                    "<p>"+home.nombre+"</p>" +
+                                    "<a href='homes/"+home.nombre+"/' class='btn'><i class='fa fa-eye'></i> Ver</a>"+
+                                "</div>"+
+                            "</div>";
+                
+            }
+            $("#houses-container").html(content);
+            
+          },
+          error: function (response) {
+            console.log(response.responseJSON.message);
+          }        
+        });
+    });
 
-
-</head>
-
-<body>
-    <div class="section section-white">
-        <div class="service-item position-relative">
-            <div class="service-text text-center">
-                <h4 class="text-dark e font-weight-medium px-3">CASA</h4>
-                <p class="text-dark px-3 mb-3">Seleccione la casa que desea visualizar</p>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-sm-6">
-                    <img class="img-fluid" src="../img/eco-house-logo.png" alt="">
-                    <div class="service-wrapper">
-                        <i class="icon-home"></i>
-                        <h3>Casa N° 1</h3>
-                        <p>Sobrenombre</p>
-                        <a href="#" class="btn">Ver</a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="service-wrapper">
-                        <i class="icon-briefcase"></i>
-                        <h3>Casa N°2</h3>
-                        <p>Sobrenombre</p>
-                        <a href="#" class="btn">Ver</a>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6">
-                    <div class="service-wrapper">
-                        <i class="icon-calendar"></i>
-                        <h3>Casa N° 3</h3>
-                        <p>Sobrenombre</p>
-                        <a href="#" class="btn">Ver</a>
-                    </div>
-                </div>
-                <a href="addhome" class="btn btn-primary d-none d-lg-block">Agregar una nueva casa</a>
-            </div>
-        </div>
-    </div>
-
-		
-</body>
+</script>
+{% endblock %}
