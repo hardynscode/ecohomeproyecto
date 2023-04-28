@@ -18,7 +18,7 @@
                   </div>
                   <div class="col-12">
                     <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>     
-                    <select class="form-control" id="tipoCasa" name="tipoCasa" required>
+                    <select class="form-control" id="tipocasa" name="tipoCasa" required>
                       <option value="">Seleccione un tipo de casa</option>
                       <option value="Apartaestudio">Apartaestudio</option>
                       <option value="Apartamento">Apartamento</option>
@@ -31,8 +31,8 @@
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
                   <div class="col-md-4">
-                    <label for="pais">País<span class="text-danger" for="pais"></span>*</span></label>
-                    <select name="pais" id="pais" class="form-control" required>
+                    <label for="pais">País <span class="text-danger" for="pais"></span>*</span></label>
+                    <select class="form-control" id="pais" name="pais" required>
                       <option value="">Seleccione un país</option>
                       <option value="colombia">Colombia</option>
                       <option value="Apartamento">Ecuador</option>
@@ -40,7 +40,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="departamento">Departamento <span class="text-danger" for="departamento"></span>*</span></label>
-                    <select name="departamento" class="form-control" id="departamento" required>
+                    <select class="form-control" id="departamento" name="departamento" required>
                       <option value="">Seleccione un departamento</option>
                       <option value="antioquia">Antioquia</option>
                       <option value="Apartamento">Cundinamarca</option>
@@ -48,9 +48,9 @@
                   </div>
                   <div class="col-md-4">
                     <label for="ciudad">Ciudad <span class="text-danger" for="ciudad"></span>*</span></label>
-                    <select name="ciudad" class="form-control" id="ciudad" required>
+                    <select class="form-control" id="ciudad" name="ciudad" required>
                       <option value="">Seleccione una ciudad</option>
-                      <option value="Medellín">Medellín</option>
+                      <option value="medellin">Medellín</option>
                       <option value="Bogota">Bogotá</option>
                     </select>  
                   </div>
@@ -77,74 +77,13 @@
 </section>
 {% endblock %}
 
-{% block scripts %}
-
-<script type="text/javascript">
-  $(document).ready(function(){
-
-    $("#formulario-newhome").submit(function(evento){
-      evento.preventDefault();
-
-       // Deshabilitamos el botón de guardar y cambiamos su texto
-      const $btnAddHome = $("#btn-addhome");
-      $("#btn-addhome").attr("disabled", true);
-      $("#btn-addhome").html("Espere..");
-
-      
-
-      // Obtenemos los valores de los campos de entrada
-      const nombreCasa = $("#nombreCasa").val();
-      const tipoCasa = $('#tipoCasa').val();
-      const direccion = $("#direccion").val();
-      const pais = $("#pais option:selected").val();    
-      const departamento = $("#departamento option:selected").val();
-      const ciudad= $("#ciudad option:selected").val();
-     
-      const identificacion = 1098313090;
-
-      const data = JSON.stringify({
-        nombreCasa: nombreCasa,
-        tipoCasa: tipoCasa,
-        direccion: direccion ,
-        pais: pais,
-        departamento: departamento,
-        ciudad: ciudad
-      });
-
-      console.log(data);
-
-        $.ajax({
-          type: "POST",
-          url: "http://127.0.0.1:5000/api/users/"+identificacion+"/houses",
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          async: true,
-          data: data,
-          success: function (response) {
-            console.log(response);
-            window.location.href = "home";
-          },
-          error: function (response) {
-            alert(response.responseJSON.message);
-
-            $("#btn-addhome").attr("disabled", false);
-            $("#btn-addhome").html("guardar");
-          },
-          
-        });
-
-    })
-
-  })
-</script>
-
-{% endblock %}
-
-
-
-
- 
-    
-
-    
-</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// hacer la petición al API
+			$.get("http://127.0.0.1:5000/api/users/109831309/+identificacion+/houses/CasaMedellin", function(data) {
+				// actualizar los campos del formulario con los datos recibidos
+				
+			});
+		});
+	</script>

@@ -6,13 +6,21 @@ app = Flask(__name__)
 def login():
     return render_template('login.html')
 
-@app.route('/home')
-def home():
-    return render_template('home.html')
+@app.route('/forgetpassword')
+def forget():
+    return render_template('forgetpassword.html')
+
+@app.route('/adduser')
+def addser():
+    return render_template('adduser.html')
 
 @app.route('/layout')
 def layout():
     return render_template('layout.html')
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route('/addhome')
 def addhome():

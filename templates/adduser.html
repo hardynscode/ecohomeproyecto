@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <title>EcoHOme</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!--  Bootstrap Stylesheet -->
+  <link href="../static/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <section class="vh-100" style="background: linear-gradient(to right,#67b990,#70c95a )">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-7">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-12 d-flex align-items-center">
+                <div class="card-body p-4 p-lg-6 text-black">
+                  <form id="formulario-registro">
+                    <h1>Registro</h1>
+                  
+                    <p>Por favor diligencie los siguientes datos para registrarse en nuestro sistema</p>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Cedula <span class="text-danger" for="campo-correo">*</label>   
+                      <input type="text" id="campo-identificacion" class="form-control bg-transparent p-6" placeholder="Cedula" required>
+                    </div>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Correo <span class="text-danger" for="campo-correo">*</label>
+                      <input type="email" id="campo-correo" class="form-control bg-transparent p-6" placeholder="Correo" required>
+                    </div>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Contraseña <span class="text-danger" for="campo-password">*</label>               
+                      <input type="password" id="campo-password" class="form-control bg-transparent p-6" placeholder="Contraseña" required>
+                    </div>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Verificar contraseña <span class="text-danger" for="campo-verificar-password">*</label>   
+                      <input type="password" id="campo-verificar-password" class="form-control bg-transparent p-6" placeholder="Verificar contraseña" required>
+                    </div>
+                  
+                    <button class="btn btn-primary btn-primary" type="submit" id="btn-registro">Guardar</button>
+                  </form>                    
+                </div>                           
+              </div>              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--Jquery cdn-->
+  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous">
+  </script>
+
+  <script type="text/javascript">
+
+    $(document).ready(() => {
+      const formularioRegistro = $("#formulario-registro");
+      const identificacion = $("#campo-identificacion");
+      const correo = $("#campo-correo");
+      const password = $("#campo-password");
+      const verificarPassword = $("#campo-verificar-password");
+      const btnRegistro = $("#btn-registro");
+
+      formularioRegistro.submit((evento) => {
+        evento.preventDefault();
+
+        if (!identificacion.val() || !correo.val() || !password.val() || !verificarPassword.val()) {
+          alert("Por favor complete todos los campos.");
+          return;
+        }
+
+        if (password.val() !== verificarPassword.val()) {
+          alert("Las contraseñas no coinciden.");
+          return;
+        }
+
+        const data = JSON.stringify({
+          identificacion: identificacion.val(),
+          correo: correo.val(),
+          password: password.val(),
+        });
+
+        btnRegistro.attr("disabled", true);
+        btnRegistro.html("Guardando...");
+
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:5000/api/users",
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          async: true,
+          data: data,
+          success: (response) => {
+            console.log(response);
+            alert("Registro exitoso.");
+            window.location.href = "/";
+          },
+          error: (response) => {
+            alert(response.responseJSON.message);
+            btnRegistro.attr("disabled", false);
+            btnRegistro.html("Guardar");
+          },
+        });
+      });
+    });
+  </script>
+  
+
+</body>
+
+</htm

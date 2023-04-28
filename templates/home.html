@@ -25,11 +25,11 @@
     
     $(document).ready(function () {
         
-        const cedula = 1098313090;
+        const identificacion = 1098313090;
 
         $.ajax({
           type: "GET",
-          url: "http://127.0.0.1:5000/api/users/"+cedula+"/houses",
+          url: "http://127.0.0.1:5000/api/users/"+identificacion+"/houses",
           dataType: "json",
           contentType: "application/json; charset=utf-8",
           async: true,
