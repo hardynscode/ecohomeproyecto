@@ -27,5 +27,9 @@ def paginaderegistro():
 def cerrarsesion():
     return render_template('cerrarsesion.html')
 
+@app.route('/administrativo')
+def administrativo():
+    return render_template('administrativo.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

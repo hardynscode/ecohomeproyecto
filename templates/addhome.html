@@ -17,7 +17,7 @@
                   </div>
                   <div class="col-12">
                     <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>     
-                    <select class="form-control" id="tipocasa" name="tipoCasa" required>
+                    <select class="form-control" id="tipoCasa" name="tipoCasa" required>
                       <option value="">Seleccione un tipo de casa</option>
                       <option value="Apartaestudio">Apartaestudio</option>
                       <option value="Apartamento">Apartamento</option>
@@ -30,8 +30,8 @@
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
                   <div class="col-md-4">
-                    <label for="pais">País <span class="text-danger" for="pais"></span>*</span></label>
-                    <select class="form-control" id="pais" name="pais" required>
+                    <label for="pais">País<span class="text-danger" for="pais"></span>*</span></label>
+                    <select name="pais" id="pais" class="form-control" required>
                       <option value="">Seleccione un país</option>
                       <option value="colombia">Colombia</option>
                       <option value="Apartamento">Ecuador</option>
@@ -39,7 +39,7 @@
                   </div>
                   <div class="col-md-4">
                     <label for="departamento">Departamento <span class="text-danger" for="departamento"></span>*</span></label>
-                    <select class="form-control" id="departamento" name="departamento" required>
+                    <select name="departamento" class="form-control" id="departamento" required>
                       <option value="">Seleccione un departamento</option>
                       <option value="antioquia">Antioquia</option>
                       <option value="Apartamento">Cundinamarca</option>
@@ -47,9 +47,9 @@
                   </div>
                   <div class="col-md-4">
                     <label for="ciudad">Ciudad <span class="text-danger" for="ciudad"></span>*</span></label>
-                    <select class="form-control" id="ciudad" name="ciudad" required>
+                    <select name="ciudad" class="form-control" id="ciudad" required>
                       <option value="">Seleccione una ciudad</option>
-                      <option value="medellin">Medellín</option>
+                      <option value="Medellín">Medellín</option>
                       <option value="Bogota">Bogotá</option>
                     </select>  
                   </div>
@@ -97,6 +97,9 @@
       const pais = $("#pais option:selected").val();    
       const departamento = $("#departamento option:selected").val();
       const ciudad= $("#ciudad option:selected").val();
+
+    
+     
      
 
       const cedula = 1098313090;
@@ -104,21 +107,32 @@
       const data = JSON.stringify({
           
           nombreCasa: nombreCasa,
-          tipoCasa: tipoCasa,
+          tipoCasa: tipocasa,
           direccion: direccion ,
           pais: pais,
           departamento: departamento,
           ciudad: ciudad
         });
 
+        function enviarequest () {
+        
+        var nombreCasa = document.getElementById("nombreCasa").value;
+        var tipoCasa = document.getElementById("tipoCasa").value;
+        var direccion = direccion.getElementById("direccion").value;
+        var pais = document.getElementById("pais").value;
+        var departamento = document.getElementById("departamento").value;
+        var ciudad = document.getElementById("ciudad").value;
+
+      }
+
 
         $.ajax({
           type: "POST",
-          url: "http://127.0.0.1:5000/api/users/"+cedula+"/houses",
+          url: "http://127.0.0.1:5000/api/users/cedula/houses",
           dataType: "json",
           contentType: "application/json; charset=utf-8",
           async: true,
-          data: data,
+          data: {nombreCasa: nombreCasa, tipoCasa: tipoCasa, pais: pais, departamento: departamento, ciudad: ciudad},
           success: function (response) {
             console.log(response);
             window.location.href = "home";

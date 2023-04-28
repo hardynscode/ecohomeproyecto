@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Ecohome Administrativo</title>
+	<!-- Agrega los estilos de Bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+
+
+
+	<!-- Barra de navegacion -->
+	<div class="container-fluid p-0">
+		<nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+			<a href="home" class="navbar-brand ml-lg-3">
+				<h1 class="m-0 text-primary"><span class="text-dark">Eco</span> Home</h1>
+			</a>
+			<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto ms-auto">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="/">Inicio</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('periodo') }}">Periodo</a>
+					</li>
+					<div class="nav-item dropdown">
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Paginas</a>
+						<div class="dropdown-menu rounded-0 m-0">
+							<a href="factura" class="dropdown-item">Factura</a>
+							<a href="periodo" class="dropdown-item">periodo</a>
+						</div>
+
+					</div>
+					<a href="dcontacto" class="btn btn-primary d-none d-lg-block">Config</a>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<!--  Footer de la barra de navegacion-->
+
+
+	<div class="card">
+		<div class="card-header">
+			Sistema administrativo
+			<div class="card-body">
+				<div class="card-footer">
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="card">
+								<div class="card-body">
+									<center>
+									<img src="/img/logo.jpg" style="width: 16rem;" alt="" srcset="">
+								</center>
+									<p class="card text-center">Casas registradas</p>
+								<center>
+									<a href="/templates/addhome.html" class="btn btn-primary" style="position: static;">Ingresar</a>
+								</center>
+								
+								</div>
+							</div>
+						</div>
+						<div class="card w-50">
+							<div class="card-body">
+								<center>
+								<img src="/img/iconotomacorriente.png" alt="" srcset="">
+									<p></p>
+							</center>
+							<center>
+							<p class="card text-center">Tomacorrientes</p>
+						</center>
+					<center>
+							<a href="paginatomacorrientes.html" class="btn btn-primary">Ingresar</a>
+						</center>
+						</div>
+						</div>
+						
+
+						<div class="col-sm-6">
+							<div class="card">
+								<div class="card-body">
+								<center>
+								<img src="/img/iconousuarios.png" alt="Usuarios" srcset="">
+							</center>
+						<center>
+							<p></p> <!-- Solo es un comentario para separar-->
+								<p class="card text-center">Usuarios registrados</p>
+							</center>
+							<center>	
+								<a href="#" class="btn btn-primary">Ingresar</a>
+							</center>
+
+							<div>
+								
+							</div>
+							
+							</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	</div>
+	</div>
+	</div>
+	
+	</div>
+	</div>
+	</div>
+	</div>
+
+	
+
+
+
+
+
+
+
+
+	<!-- Navbar Eco Home-->
+
+
+
+	<!-- Agrega los scripts de Bootstrap y el controlador de eventos en JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Piixqu"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script>
+		// Controlador de eventos para la opción "Casa"
+		document.getElementById("opcion-casa").addEventListener("click", function (event) {
+			event.preventDefault(); // Evita que la página se redirija
+			document.getElementById("contenido-adicional").innerHTML = `
+		<h2>Contenido adicional de Casa</h2>
+		<p>Este es el contenido adicional de la opción "Casa".</p>
+		`;
+		});
+
+		// Controlador de eventos para la opción "Datos personales"
+		document.getElementById("opcion-datos-personales").addEventListener("click", function (event) {
+			event.preventDefault(); // Evita
+		})
