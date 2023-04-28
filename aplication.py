@@ -1,4 +1,4 @@
-from flask import Flask,render_template
+from flask import Flask,render_template, request
 
 app = Flask(__name__)
 
@@ -25,6 +25,11 @@ def home():
 @app.route('/addhome')
 def addhome():
     return render_template('addhome.html')
+
+@app.route('/detailshome')
+def detailshome():
+    idCasa = request.args.get('idCasa')
+    return render_template('detailshome.html', idCasa=idCasa)
 
 @app.route('/periodo')
 def periodo():

@@ -5,85 +5,190 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-10 offset-lg-1">
-        
+
         <div class="bg-white shadow rounded">
           <div class="row">
             <div class="col-md-8 pe-0">
               <div class="form-left h-100 py-5 px-5">
-                <h3 class="mb-3">Crear una nueva casa</h3>
-                <form  id="formulario-newhome"class="row g-4">
+                <h3 class="mb-3">Detalles de la casa</h3>
+                <form id="form-detailshome" class="row g-4">
                   <div class="col-12">
                     <label>Nombre de la casa<span class="text-danger" for="nombreCasa">*</span></label>
-                    <input type="text" id="nombreCasa"class="form-control" placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" >
+                    <input type="text" id="nombreCasa" class="form-control"
+                      placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" readonly>
                   </div>
                   <div class="col-12">
-                    <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>     
-                    <select class="form-control" id="tipocasa" name="tipoCasa" required>
+                    <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>
+                    <select class="form-control" id="tipoCasa" name="tipoCasa" required>
                       <option value="">Seleccione un tipo de casa</option>
                       <option value="Apartaestudio">Apartaestudio</option>
                       <option value="Apartamento">Apartamento</option>
                       <option value="Casa">Casa</option>
                       <option value="Finca">Finca</option>
-                    </select>                              
+                    </select>
                   </div>
                   <div class="col-12">
-                    <label for="direccion" class="titulo">Dirección <span class="text-danger" for="direccion">*</span></label>
+                    <label for="direccion" class="titulo">Dirección <span class="text-danger"
+                        for="direccion">*</span></label>
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
                   <div class="col-md-4">
-                    <label for="pais">País <span class="text-danger" for="pais"></span>*</span></label>
-                    <select class="form-control" id="pais" name="pais" required>
+                    <label for="pais">País<span class="text-danger" for="pais"></span>*</span></label>
+                    <select name="pais" id="pais" class="form-control" required>
                       <option value="">Seleccione un país</option>
                       <option value="colombia">Colombia</option>
                       <option value="Apartamento">Ecuador</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-md-4">
-                    <label for="departamento">Departamento <span class="text-danger" for="departamento"></span>*</span></label>
-                    <select class="form-control" id="departamento" name="departamento" required>
+                    <label for="departamento">Departamento <span class="text-danger"
+                        for="departamento"></span>*</span></label>
+                    <select name="departamento" class="form-control" id="departamento" required>
                       <option value="">Seleccione un departamento</option>
                       <option value="antioquia">Antioquia</option>
                       <option value="Apartamento">Cundinamarca</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-md-4">
                     <label for="ciudad">Ciudad <span class="text-danger" for="ciudad"></span>*</span></label>
-                    <select class="form-control" id="ciudad" name="ciudad" required>
+                    <select name="ciudad" class="form-control" id="ciudad" required>
                       <option value="">Seleccione una ciudad</option>
-                      <option value="medellin">Medellín</option>
+                      <option value="Medellín">Medellín</option>
                       <option value="Bogota">Bogotá</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-12">
-                    <form>
-                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn btn-primary px-4 float-end mt-4" value="Iniciar sesión">Guardar</button>
-                    </form>
+                    <button type="submit" id="btn-detailshome" class="btn-ecohome px-4"
+                      value="actualizar">Actualizar</button>
+                    <a href="javascript: void();" id="eliminar-casa" class="btn btn-danger px-4 float-end">Eliminar</a>
                   </div>
                 </form>
               </div>
-          </div>
-          <div class="col-md-4 ps-0 d-none d-md-block">
+            </div>
+            <div class="col-md-4 ps-0 d-none d-md-block">
               <div class="form-right h-100 bg-transparent text-black text-center pt-5">
                 <i class=""></i>
                 <h2 class="fs-1">Agregar Foto</h2>
               </div>
+            </div>
           </div>
+        </div>
+        <p class="text-end text-secondary mt-3"></p>
       </div>
+    </div>
   </div>
-      <p class="text-end text-secondary mt-3"></p>
-  </div>
-  </div>
-  </div>           
 </section>
 {% endblock %}
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			// hacer la petición al API
-			$.get("http://127.0.0.1:5000/api/users/109831309/+identificacion+/houses/CasaMedellin", function(data) {
-				// actualizar los campos del formulario con los datos recibidos
-				
-			});
-		});
-	</script>
+
+
+
+{% block scripts %}
+<script type="text/javascript">
+
+  $(document).ready(function () {
+    // obtenemos la informacion del usuario del local storage
+    const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+
+    const identificacion = usuario.identificacion;
+    const nombreCasa = "{{ idCasa }}";
+
+    // hacer la petición al API
+    $.get("http://127.0.0.1:5000/api/users/" + identificacion + "/houses/" + nombreCasa, function (data) {
+
+      if (data) {
+        $("#nombreCasa").val(data.nombreCasa);
+        $("#tipoCasa").val(data.tipoCasa);
+        $("#direccion").val(data.direccion);
+        $("#pais").val(data.pais);
+        $("#departamento").val(data.departamento);
+        $("#ciudad").val(data.ciudad);
+      }
+    });
+
+
+    $("#form-detailshome").submit(function (evento) {
+      evento.preventDefault();
+
+      // Deshabilitamos el botón de actualizar y cambiamos su texto
+      $("#btn-detailshome").attr("disabled", true);
+      $("#btn-detailshome").html("Espere..");
+
+
+      // Obtenemos los valores de los campos de entrada
+      const nombreCasa = $("#nombreCasa").val();
+      const tipoCasa = $('#tipoCasa').val();
+      const direccion = $("#direccion").val();
+      const pais = $("#pais option:selected").val();
+      const departamento = $("#departamento option:selected").val();
+      const ciudad = $("#ciudad option:selected").val();
+
+      // obtenemos la informacion del usuario del local storage
+      const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+      const identificacion = usuario.identificacion;
+
+      const data = JSON.stringify({
+        nombreCasa: nombreCasa,
+        tipoCasa: tipoCasa,
+        direccion: direccion,
+        pais: pais,
+        departamento: departamento,
+        ciudad: ciudad
+      });
+
+      $.ajax({
+        type: "PUT",
+        url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/" + nombreCasa,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        data: data,
+        success: function (response) {
+          console.log(response);
+          window.location.href = "home";
+        },
+        error: function (response) {
+          alert(response.responseJSON.message);
+
+          $("#btn-detailshome").attr("disabled", false);
+          $("#btn-detailshome").html("Actualizar");
+        },
+
+      });
+
+    });
+
+    $("#eliminar-casa").click(function () {
+      const eliminar = confirm("Desea eliminar esta casa?");
+
+      if (eliminar) {
+
+        $("#eliminar-casa").attr("disabled", true);
+        $("#eliminar-casa").html("Espere..");
+
+        $.ajax({
+          type: "DELETE",
+          url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/" + nombreCasa,
+          dataType: "json",
+          contentType: "application/json; charset=utf-8",
+          async: true,
+          success: function (response) {
+            console.log(response);
+            window.location.href = "home";
+          },
+          error: function (response) {
+            alert(response.responseJSON.message);
+
+            $("#eliminar-casa").attr("disabled", false);
+            $("#eliminar-casa").html("Eliminar");
+          }
+        });
+      }
+    });
+
+
+  });
+</script>
+
+
+{% endblock %}

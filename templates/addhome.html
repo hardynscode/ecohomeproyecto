@@ -56,7 +56,7 @@
                   </div>
                   <div class="col-12">
                     <form>
-                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn btn-primary px-4 float-end mt-4" value="Iniciar sesión">Guardar</button>
+                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn-ecohome px-4 float-end" value="Iniciar sesión">Guardar</button>
                     </form>
                   </div>
                 </form>
@@ -100,7 +100,9 @@
       const departamento = $("#departamento option:selected").val();
       const ciudad= $("#ciudad option:selected").val();
      
-      const identificacion = 1098313090;
+      // obtenemos la informacion del usuario del local storage
+      const usuario = JSON.parse(localStorage.getItem('user-ecohome'));  
+      const identificacion = usuario.identificacion;
 
       const data = JSON.stringify({
         nombreCasa: nombreCasa,

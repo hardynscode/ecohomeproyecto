@@ -1,5 +1,7 @@
 body{
-    background: linear-gradient(to right,#67b990,#70c95a );
+    
+    background: linear-gradient(to right,#f5f1f1,#f5f1f1 );
+    
 }
 .form-gap {
     padding-top: 70px;
@@ -20,13 +22,26 @@ a {
 }
 
 .btn-primary {
-    color: #f3f5f7;
+    color: #fafafa;
     background-color: #050505;
     border-color: #000000;
+}
 
-  }
 
+.btn-ecohome {
+    color: #020202;
+    background-color: #52c743;
+    border-color: #40cc3b;
+    border-radius: 10px;
+    text-align: center;
+    font-size: larger;    
+    padding: 8px 8px;
+    text-decoration: none;
+}
 
+.text-ecohome {
+    color: #6bb860; /* cambiar el color del texto principal */
+    }
   
   .input {
     border: 2px solid #ccc;

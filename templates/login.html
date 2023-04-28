@@ -99,6 +99,10 @@
           data: data,
           success: function (response) {
             console.log(response);
+
+            // guardamos la informacion del usuario logueado en el local storage
+            localStorage.setItem('user-ecohome', JSON.stringify(response.usuario));
+
             if (response.usuario && response.usuario.rol == "admin") {
               window.location.href = "administrativo";
             } else if (response.dataCompleta == true) {

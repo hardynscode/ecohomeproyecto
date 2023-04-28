@@ -4,8 +4,9 @@
 <div class="service-item position-relative">
     <div class="service-text text-center">
         <h4 class="text-dark e font-weight-medium px-3">Seleccione la casa que desea visualizar</h4>
+        <h6 class="text-dark e font-weight-medium px-3">Estas con las casas que usted ha registrado</h6>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+            integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     </div>
 </div>
@@ -15,49 +16,58 @@
         Cargando...
     </div>
     <div class="row" style="margin-top: 30px;">
-        <a href="addhome" class="btn btn-primary d-lg-block pt-1">Agregar una nueva casa</a>
+        <a href="addhome" class="btn-ecohome d-lg-block">Agregar una nueva casa</a>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script type="text/javascript">
-    
+
     $(document).ready(function () {
-        
-        const identificacion = 1098313090;
+
+        // obtenemos la informacion del usuario del local storage
+        const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+
+        const identificacion = usuario.identificacion;
 
         $.ajax({
-          type: "GET",
-          url: "http://127.0.0.1:5000/api/users/"+identificacion+"/houses",
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          async: true,
-          success: function (response) {
-            
-            const houses = response;
-            let content = "";
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
 
-            for (let index = 0; index < houses.length; index++) {
-                const home = houses[index];
+                const houses = response;
+                let content = "";
 
-                content += "<div class='col-md-4 col-sm-6'> "+
-                                "<img class='img-fluid' src='../img/eco-house-logo.png' alt=''>"+
-                                "<div class='service-wrapper'>"+
-                                    "<i class='icon-home'></i>"+
-                                    "<h3>Casa N° "+(index + 1)+"</h3>"+
-                                    "<p>"+home.nombre+"</p>" +
-                                    "<a href='homes/"+home.nombre+"/' class='btn'><i class='fa fa-eye'></i> Ver</a>"+
-                                "</div>"+
+                if (houses) {
+                    for (let index = 0; index < houses.length; index++) {
+                        const home = houses[index];
+
+                        content += "<div class='col-md-4 col-sm-6'> " +
+                            "<img class='img-fluid' src='../img/eco-house-logo.png' alt=''>" +
+                            "<div class='service-wrapper'>" +
+                            "<i class='icon-home'></i>" +
+                            "<h3>Casa N° " + (index + 1) + "</h3>" +
+                            "<p>" + home.nombre + "</p>" +
+                            "<a href='detailshome?idCasa=" + home.nombre + "' class='btn'><i class='fa fa-eye'></i> Ver</a>" +
+
+                            "</div>" +
                             "</div>";
-                
+
+                    }
+                    $("#houses-container").html(content);
+                } else {
+                    $("#houses-container").html("No hay casas registradas");
+                }
+
+
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
             }
-            $("#houses-container").html(content);
-            
-          },
-          error: function (response) {
-            console.log(response.responseJSON.message);
-          }        
         });
     });
 

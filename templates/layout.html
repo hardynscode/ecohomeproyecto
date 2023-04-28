@@ -15,8 +15,9 @@
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <!-- cdn -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -26,7 +27,7 @@
         <div class="row py-2 px-lg-5">
             <div class="col-lg-6 text-left mb-2 mb-lg-0">
                 <div class="d-inline-flex align-items-center">
-                    <small><i class="fa fa-phone-alt mr-2"></i>Proyecto</small>
+                    <small><i class="fa fa-home mr-2"></i>Proyecto</small>
                 </div>
             </div>
 
@@ -38,7 +39,7 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
             <a href="home" class="navbar-brand ml-lg-3">
-                <h1 class="m-0 text-primary"><span class="text-dark">Eco</span> Home</h1>
+                <h1 class="m-0 text-ecohome"><span class="text-dark">Eco</span>Home</h1>
             </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
@@ -59,7 +60,7 @@
                         </div>
 
                     </div>
-                    <a href="dcontacto" class="btn btn-primary d-none d-lg-block">Config</a>
+                    <a href="dcontacto" class="btn-ecohome d-none d-lg-block">Config</a>
                 </ul>
             </div>
         </nav>
@@ -71,11 +72,20 @@
         {% block content %}
         {% endblock %}
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.js"
+        integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        // obtenemos la informacion del usuario del local storage para saber si esta logueado, en caso contrario se direcciona a pantalla de login
+        const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+        
+        if (!usuario) {
+            window.location.href = "/";
+        }
+    </script>
     {% block scripts %}
-    
+
     {% endblock %}
 </body>
 
