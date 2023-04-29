@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item position-relative">
+    <h4 class="text-dark e font-weight-medium px-3">Todas los Usuarios</h4>
+    <div class="service py-2 px-2">
+        <h6 class="text-dark e font-weight-medium px-3">Estos son los usuarios registrados en el sistema:
+            <a href="#" class="btn btn-success" style="float: right;">Agregar una nuevo usuario</a>
+        </h6>
+    </div>
+</div>
+
+    <div class="row col-lg-12 py-2 px-2 p-lg-5">
+        <table class='table table-responsive table-condensed table-bordered'>
+            <thead>
+                <tr>
+                    <th scope='col'>Identificación</th>
+                    <th scope='col'>Nombre 1</th>
+                    <th scope='col'>Nombre 2</th>
+                    <th scope='col'>Apellido 1</th>
+                    <th scope='col'>Apellido 2</th>
+                    <th scope='col'>Correo</th>
+                    <th scope='col'>Celular</th>
+                    <th scope='col'>Fecha Nacimiento</th>
+                    <th scope='col'>Rol</th>
+                    <th scope='col'>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="users-container">
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/users",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+
+                const users = response;
+                let content = "";
+
+                if (users) {
+                    for (let index = 0; index < users.length; index++) {
+                        const user = users[index];
+
+                        content += "<tr> " +
+                            "<td>"+ (user.identificacion || '') +"</td>" +
+                            "<td>"+ (user.nombre1 || '') +"</td>" +
+                            "<td>"+ (user.nombre2 || '') +"</td>" +
+                            "<td>"+ (user.apellido1 || '') +"</td>" +
+                            "<td>"+ (user.apellido2 || '') +"</td>" +
+                            "<td>"+ (user.correo || '') +"</td>" +
+                            "<td>"+ (user.celular || '') +"</td>" +
+                            "<td>"+ (user.fechaNacimiento || '') +"</td>" +
+                            "<td>"+ (user.rol || 'cliente') +"</td>" +
+                            "<td>" +
+                                "<a class='btn btn-sm btn-success' href='#'><i class='fa fa-eye mr-2'></i></a>"+
+                                "<a class='btn btn-sm btn-danger' href='#'><i class='fa fa-trash'></i></a>"+
+                            "</td>" +
+                            "</tr>";
+
+                    }
+                    $("#users-container").html(content);
+                } else {
+                    $("#users-container").html("No hay usuarios registrados");
+                }
+
+
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
+            }
+        });
+    });
+
+</script>
+{% endblock %}

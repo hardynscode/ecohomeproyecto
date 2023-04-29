@@ -35,15 +35,16 @@
                     <select name="pais" id="pais" class="form-control" required>
                       <option value="">Seleccione un país</option>
                       <option value="colombia">Colombia</option>
-                      <option value="Apartamento">Ecuador</option>
+                      <option value="ecuador">Ecuador</option>
                     </select>  
                   </div>
                   <div class="col-md-4">
                     <label for="departamento">Departamento <span class="text-danger" for="departamento"></span>*</span></label>
                     <select name="departamento" class="form-control" id="departamento" required>
                       <option value="">Seleccione un departamento</option>
-                      <option value="antioquia">Antioquia</option>
-                      <option value="Apartamento">Cundinamarca</option>
+                      <option value="Antioquia">Antioquia</option>
+                      <option value="Quindio">Quindio</option>
+                      <option value="Cundinamarca">Cundinamarca</option>
                     </select>  
                   </div>
                   <div class="col-md-4">
@@ -52,11 +53,14 @@
                       <option value="">Seleccione una ciudad</option>
                       <option value="Medellín">Medellín</option>
                       <option value="Bogota">Bogotá</option>
+                      <option value="Armenia">Armenia</option>
+                      <option value="Circasia">Circasia</option>
+                      <option value="Envigado">Envigado</option>
                     </select>  
                   </div>
                   <div class="col-12">
                     <form>
-                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn-ecohome px-4 float-end" value="Iniciar sesión">Guardar</button>
+                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn btn-success px-4 float-end">Guardar</button>
                     </form>
                   </div>
                 </form>
@@ -64,8 +68,6 @@
           </div>
           <div class="col-md-4 ps-0 d-none d-md-block">
               <div class="form-right h-100 bg-transparent text-black text-center pt-5">
-                <i class=""></i>
-                <h2 class="fs-1">Agregar Foto</h2>
               </div>
           </div>
       </div>
@@ -130,7 +132,7 @@
             alert(response.responseJSON.message);
 
             $("#btn-addhome").attr("disabled", false);
-            $("#btn-addhome").html("guardar");
+            $("#btn-addhome").html("Guardar");
           },
           
         });

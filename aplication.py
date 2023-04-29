@@ -38,5 +38,13 @@ def dcontacto():
 def administrativo():
     return render_template('./admin/homeadmin.html')
 
+@app.route('/admin/users')
+def listadoUsuarios():
+    return render_template('./admin/users.html')
+
+@app.route('/admin/houses')
+def listadoCasas():
+    return render_template('./admin/houses.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

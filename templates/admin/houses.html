@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item position-relative">
+    <h4 class="text-dark e font-weight-medium px-3">Todas las Casas</h4>
+    <div class="service py-2 px-2">
+        <h6 class="text-dark e font-weight-medium px-3">Estas son las casas registradas en el sistema:
+            <a href="#" class="btn btn-success" style="float: right;">Agregar una nueva casa</a>
+        </h6>
+    </div>
+</div>
+
+    <div class="row col-lg-12 py-2 px-2 p-lg-5">
+        <table class='table table-responsive table-condensed table-bordered'>
+            <thead>
+                <tr>
+                    <th scope='col'>Tipo</th>
+                    <th scope='col'>Nombre</th>
+                    <th scope='col'>Direccion</th>
+                    <th scope='col'>Pais</th>
+                    <th scope='col'>Departamento</th>
+                    <th scope='col'>Ciudad</th>
+                    <th scope='col'>Usuario</th>
+                    <th scope='col'>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="houses-container">
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/houses",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+
+                const houses = response;
+                let content = "";
+
+                if (houses) {
+                    for (let index = 0; index < houses.length; index++) {
+                        const house = houses[index];
+
+                        content += "<tr> " +
+                            "<td>"+ (house.tipoCasa || '') +"</td>" +
+                            "<td>"+ (house.nombreCasa || '') +"</td>" +
+                            "<td>"+ (house.direccion || '') +"</td>" +
+                            "<td>"+ (house.pais || '') +"</td>" +
+                            "<td>"+ (house.departamento || '') +"</td>" +
+                            "<td>"+ (house.ciudad || '') +"</td>" +
+                            "<td>"+ (house.identificacionCliente || '') +"</td>" +
+                            "<td>" +
+                                "<a class='btn btn-sm btn-success' href='#'><i class='fa fa-eye mr-2'></i></a>"+
+                                "<a class='btn btn-sm btn-danger' href='#'><i class='fa fa-trash'></i></a>"+
+                            "</td>" +
+                            "</tr>";
+
+                    }
+                    $("#houses-container").html(content);
+                } else {
+                    $("#houses-container").html("No hay casas registradas");
+                }
+
+
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
+            }
+        });
+    });
+
+</script>
+{% endblock %}
