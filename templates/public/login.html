@@ -47,10 +47,10 @@
                     </div> 
 
                 
-                    <p class="small-text"> <a  href="forgetpassword" class="link">Olvide mi comtraseña</a></p>
+                    <p class="small-text py-2"> <a  href="forgetpassword" class="link">Olvide mi contraseña</a></p>
                     
                     <div class="pt-1 mb-4">
-                      <button class="btn btn-primary btn-primary" type="submit" id="btn-login">Iniciar sesión</button>
+                      <button class="btn btn-success btn-primary" type="submit" id="btn-login">Iniciar sesión</button>
                     </div>
 
                     <p class="small-text">¿No tienes una cuenta? <a href="adduser" class="link">Registrarme</a></p>
@@ -104,7 +104,7 @@
             localStorage.setItem('user-ecohome', JSON.stringify(response.usuario));
 
             if (response.usuario && response.usuario.rol == "admin") {
-              window.location.href = "administrativo";
+              window.location.href = "/admin/home";
             } else if (response.dataCompleta == true) {
               window.location.href = "home";
             } else {

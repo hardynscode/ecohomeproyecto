@@ -2,22 +2,20 @@ from flask import Flask,render_template, request
 
 app = Flask(__name__)
 
+# Rutas publicas (sin login)
 @app.route('/')
 def login():
-    return render_template('login.html')
+    return render_template('./public/login.html')
 
 @app.route('/forgetpassword')
 def forget():
-    return render_template('forgetpassword.html')
+    return render_template('./public/forgetpassword.html')
 
 @app.route('/adduser')
 def addser():
-    return render_template('adduser.html')
+    return render_template('./public/adduser.html')
 
-@app.route('/layout')
-def layout():
-    return render_template('layout.html')
-
+# Rutas para usuarios tipo cliente
 @app.route('/home')
 def home():
     return render_template('home.html')
@@ -31,29 +29,14 @@ def detailshome():
     idCasa = request.args.get('idCasa')
     return render_template('detailshome.html', idCasa=idCasa)
 
-@app.route('/periodo')
-def periodo():
-    return render_template('periodo.html')
-
-@app.route('/facturaepm')
-def factura():
-    return render_template('factura.html')
-
 @app.route('/dcontacto')
 def dcontacto():
     return render_template('dcontacto.html')
 
-@app.route('/paginaderegistro')
-def paginaderegistro():
-    return render_template('paginaderegistro.html')
-    
-@app.route('/cerrarseion')
-def cerrarsesion():
-    return render_template('cerrarsesion.html')
-
-@app.route('/administrativo')
+#Rutas para usuarios tipo admin
+@app.route('/admin/home')
 def administrativo():
-    return render_template('administrativo.html')
+    return render_template('./admin/homeadmin.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

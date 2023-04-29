@@ -22,45 +22,35 @@
 
 <body>
 
-    <!--topbar -->
-    <div class="container-fluid bg-light d-none d-lg-block">
-        <div class="row py-2 px-lg-5">
-            <div class="col-lg-6 text-left mb-2 mb-lg-0">
-                <div class="d-inline-flex align-items-center">
-                    <small><i class="fa fa-home mr-2"></i>Proyecto</small>
-                </div>
-            </div>
 
-        </div>
-    </div>
-    <!-- Topbar End -->
 
     <!-- Navbar Star -->
     <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-4 px-4 px-lg-5">
             <a href="home" class="navbar-brand ml-lg-3">
-                <h1 class="m-0 text-ecohome"><span class="text-dark">Eco</span>Home</h1>
+                <h1 class="m-0 text-ecohome"><span class="text-dark">Eco</span>Home <small
+                        id="info-tipo-usuario"></small></h1>
             </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav ml-auto ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                        <a class="nav-link active" aria-current="page" href="javascript: void(0);"
+                            id="btn-ir-home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('periodo') }}">Periodo</a>
+                        <a class="nav-link" href="{{ url_for('dcontacto') }}">Mi Perfil </a>
                     </li>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Paginas</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a href="factura" class="dropdown-item">Factura</a>
-                            <a href="periodo" class="dropdown-item">periodo</a>
-                        </div>
-
-                    </div>
-                    <a href="dcontacto" class="btn-ecohome d-none d-lg-block">Config</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Historial de Consumo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="javascript: void(0);" id="btn-salir"><i
+                                class="fa fa-sign-out"></i></i>Salir</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -68,7 +58,7 @@
     <!--  Navbar Star End-->
 
 
-    <div class="section section-white">
+    <div class="section section-white pt-3">
         {% block content %}
         {% endblock %}
     </div>
@@ -77,12 +67,29 @@
         integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
 
     <script type="text/javascript">
+
         // obtenemos la informacion del usuario del local storage para saber si esta logueado, en caso contrario se direcciona a pantalla de login
         const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
-        
         if (!usuario) {
             window.location.href = "/";
+        } else {
+            $("#info-tipo-usuario").html(usuario.rol);
         }
+
+        $(document).ready(function () {
+            $("#btn-salir").click(function () {
+                localStorage.setItem('user-ecohome', null);
+                window.location.href = "/";
+            });
+
+            $("#btn-ir-home").click(function () {
+                if (usuario.rol == "admin") {
+                    window.location.href = "/admin/home";
+                } else {
+                    window.location.href = "home";
+                }
+            });
+        });
     </script>
     {% block scripts %}
 

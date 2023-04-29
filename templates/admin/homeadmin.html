@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+	<div class="card-header">
+		Sistema administrativo
+		<div class="card-body">
+			<div class="card-footer">
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="card">
+							<div class="card-body">
+								<center>
+									<img src="/img/logo.jpg" style="width: 16rem;" alt="" srcset="">
+								</center>
+								<p class="card text-center">Casas registradas</p>
+								<center>
+									<a href="/templates/addhome.html" class="btn btn-primary"
+										style="position: static;">Ingresar</a>
+								</center>
+
+							</div>
+						</div>
+					</div>
+					<div class="card w-50">
+						<div class="card-body">
+							<center>
+								<img src="/img/iconotomacorriente.png" alt="" srcset="">
+								<p></p>
+							</center>
+							<center>
+								<p class="card text-center">Tomacorrientes</p>
+							</center>
+							<center>
+								<a href="paginatomacorrientes.html" class="btn btn-primary">Ingresar</a>
+							</center>
+						</div>
+					</div>
+
+
+					<div class="col-sm-6">
+						<div class="card">
+							<div class="card-body">
+								<center>
+									<img src="/img/iconousuarios.png" alt="Usuarios" srcset="">
+								</center>
+								<center>
+									<p></p> <!-- Solo es un comentario para separar-->
+									<p class="card text-center">Usuarios registrados</p>
+								</center>
+								<center>
+									<a href="#" class="btn btn-primary">Ingresar</a>
+								</center>
+
+								<div>
+
+								</div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
