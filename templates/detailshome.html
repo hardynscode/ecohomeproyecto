@@ -14,6 +14,28 @@
                 <form id="form-detailshome" class="row g-4">
                   <div class="col-12">
                     <label>Nombre de la casa<span class="text-danger" for="nombreCasa">*</span></label>
+
+                    <div class="btn">
+
+                      <style>
+                        .btn {
+                          display: flex;
+                          justify-content: right;
+                          
+                        }
+                      </style>
+
+
+                      <a class="btn btn-primary" href="/templates/paginatomacorrientes.html"" role="button">
+                        <b>+</b>
+                        Agregar tomacorriente
+                      </a>
+                      
+                      
+
+                    </div>
+
+
                     <input type="text" id="nombreCasa" class="form-control"
                       placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" readonly>
                   </div>
@@ -28,7 +50,7 @@
                     </select>
                   </div>
                   <div class="col-12">
-                    <label for="direccion" class="titulo">Dirección <span class="text-danger"
+                    <label for="direccion" class="titulo">Dirección<span class="text-danger"
                         for="direccion">*</span></label>
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
@@ -71,7 +93,7 @@
             </div>
             <div class="col-md-4 ps-0 d-none d-md-block">
               <div class="form-right h-100 bg-transparent text-black text-center pt-5">
-                
+
               </div>
             </div>
           </div>
