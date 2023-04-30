@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
+
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/settings">Configuraciones</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tipos de Tomacorrientes</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row col-lg-12 py-2 px-2 p-lg-5">
+    <form id="form-tipos-tomacorrientes">
+
+    
+    <table class='table table-responsive table-condensed table-bordered'>
+        <thead>
+            <tr>
+                <th scope='col'>Nombre</th>
+                <th scope='col'>Descripcion</th>
+                <th scope='col'>Numero de Entradas</th>
+                <th scope='col'>Opciones</th>
+            </tr>
+        </thead>
+        <tbody id="list-container">
+        </tbody>
+    </table>
+    <div class="col-lg-12">
+        <a href="javascript: void(0);" id="btn-agregar-tipo" style="float: left;" class="btn btn-sm btn-success">+</a>
+        <button type="submit" value="Guardar" id="btn-guardar-tipos" style="float: right;" class="btn btn-sm btn-success">Guardar</button>
+    </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        let cantidadTomas = 0;
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/settings?tipo=tiposTomacorriente",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+
+                const tipos = response;
+                let content = "";
+
+                for (const key in tipos) {
+                    if (Object.hasOwnProperty.call(tipos, key)) {
+                        cantidadTomas += 1;
+                        const tipoToma = tipos[key];
+                        content += "<tr id='tipo-"+cantidadTomas+"'><td><input type='text' class='form-control campo-nombre-"+cantidadTomas+"' required readonly placeholder='Nombre' value='"+(tipoToma.nombre || "") +"'/> </td> "+
+                            "<td><input type='text' class='form-control campo-descripcion-"+cantidadTomas+"' required placeholder='Descripcion' value='"+(tipoToma.descripcion || "") +"' /> </td>"+
+                            "<td><input type='text' class='form-control campo-numero-"+cantidadTomas+"' required placeholder='Numero de Entradas' value='"+(tipoToma.numeroEntradas || "") +"'/> </td>"+
+                            "<td><a class='btn btn-sm btn-danger eliminar-tipo' tipo-id='"+cantidadTomas+"'><i class='fa fa-trash'></i></a></tr>";
+                    }
+                }
+
+                $("#list-container").html(content);
+
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
+            }
+        });
+
+
+        $("#btn-agregar-tipo").click(function(){
+            cantidadTomas += 1;
+            const content = "<tr id='tipo-"+cantidadTomas+"'><td><input type='text' class='form-control campo-nombre-"+cantidadTomas+"' required placeholder='Nombre' value=''/> </td> "+
+                            "<td><input type='text' class='form-control campo-descripcion-"+cantidadTomas+"' required placeholder='Descripcion' value='' /> </td>"+
+                            "<td><input type='text' class='form-control campo-numero-"+cantidadTomas+"' required placeholder='Numero de Entradas' value=''/> </td>"+
+                            "<td><a class='btn btn-sm btn-danger eliminar-tipo' tipo-id='"+cantidadTomas+"'><i class='fa fa-trash'></i></a></tr>";
+            
+            $("#list-container").append(content);
+
+        });
+
+        $('#list-container').on('click', 'a.eliminar-tipo', function() {
+            const idEliminar = "tipo-"+$(this).attr("tipo-id");
+            $("#"+idEliminar).remove();
+        });
+    });
+
+</script>
+{% endblock %}

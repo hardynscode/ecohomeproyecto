@@ -46,5 +46,13 @@ def listadoUsuarios():
 def listadoCasas():
     return render_template('./admin/houses.html')
 
+@app.route('/admin/settings')
+def listadoSettings():
+    return render_template('./admin/settings/home.html')
+
+@app.route('/admin/settings/tiposTomacorriente')
+def listadoSettingsTiposTomacorriente():
+    return render_template('./admin/settings/tiposTomacorriente.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
