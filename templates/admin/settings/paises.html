@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
+
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/settings">Configuraciones</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Paises</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row col-lg-12 py-2 px-2 p-lg-5">
+    <form id="form-paises">
+
+
+        <table class='table table-responsive table-condensed table-bordered'>
+            <thead>
+                <tr>
+                    <th scope='col'>Nombre</th>
+                    <th scope='col'>Departamentos</th>
+                    <th scope='col'>Opciones</th>
+                </tr>
+            </thead>
+            <tbody id="list-container">
+            </tbody>
+        </table>
+        <div class="col-lg-12">
+            <a href="javascript: void(0);" id="btn-agregar-tipo" style="float: left;"
+                class="btn btn-sm btn-success">+</a>
+            <button type="submit" value="Guardar" id="btn-guardar" style="float: right;"
+                class="btn btn-sm btn-success">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        const tipoSettings = "paises";
+        let cantidadRegistros = 0;
+        let paises = null;
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/settings?tipo=" + tipoSettings.toLocaleLowerCase(),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+
+                paises = response;
+                console.log("data inicial", paises);
+                let content = "";
+
+                for (const key in paises) {
+                    if (Object.hasOwnProperty.call(paises, key)) {
+                        cantidadRegistros += 1;
+                        const pais = paises[key];
+                        const cantDepartamentos = pais["departamentos"] ? Object.keys(pais["departamentos"]).length : 0;
+
+                        content += "<tr id='tipo-" + cantidadRegistros + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRegistros + "' required readonly disabled placeholder='Nombre' value='" + (pais.nombre || "") + "'/> </td> " +
+                            "<td><span>" + cantDepartamentos + "</span></td>" +
+                            "<td>" +
+                            "<a class='btn btn-sm btn-success' href='/admin/settings/paises/" + pais.nombre + "/departamentos' title='Ver Departamentos'><i class='fa fa-list'></i></a>";
+
+                        if (cantDepartamentos == 0) {
+                            content += "<a class='btn btn-sm btn-danger eliminar' tipo-id='" + cantidadRegistros + "'><i class='fa fa-trash'></i></a>";
+                        }
+
+                        content += "</tr>";
+                    }
+                }
+
+                $("#list-container").html(content);
+
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
+            }
+        });
+
+        // Evento para agregar al final de la tabla una nueva fila con los campos de un  nuevo registro
+        $("#btn-agregar-tipo").click(function () {
+            cantidadRegistros += 1;
+            const content = "<tr id='tipo-" + cantidadRegistros + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRegistros + "' required placeholder='Nombre' value=''/> </td> " +
+                "<td><span>0</span></td>" +
+                "<td>" +
+                "<a class='btn btn-sm btn-danger eliminar d-none' tipo-id='" + cantidadRegistros + "'><i class='fa fa-trash'></i></a>" +
+                "</td></tr>";
+
+            $("#list-container").append(content);
+
+        });
+
+        // Evento para eliminar la fila seleccionada con los campos de un registro
+        $('#list-container').on('click', 'a.eliminar', function () {
+            const eliminar = confirm("Desea eliminar este elemento?");
+
+            if (eliminar) {
+                const idEliminar = "tipo-" + $(this).attr("tipo-id");
+                $("#" + idEliminar).remove();
+                cantidadRegistros -= 1;
+            }
+        });
+
+        // Evento para guardar los cambios en los registros
+        $("#form-paises").submit(function (evento) {
+            evento.preventDefault();
+            const data = {};
+
+            for (let index = 1; index <= cantidadRegistros; index++) {
+                const nombre = $("#campo-nombre-" + index).val();
+                const key = nombre.toLowerCase().replaceAll(" ", "_");
+                if (key in paises) {
+                    data[key] = paises[key];
+                    data[key]["nombre"] = nombre;
+                } else {
+                    data[key] = { nombre, departamentos: {} };
+                }
+            }
+
+            // Deshabilitamos el botón de guardado
+            $("#btn-guardar").attr("disabled", true);
+            $("#btn-guardar").html("Espere..");
+
+            $.ajax({
+                type: "PUT",
+                url: "http://127.0.0.1:5000/api/settings?tipo=" + tipoSettings.toLocaleLowerCase(),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                async: true,
+                success: function (response) {
+                    if (response.message) {
+                        alert(response.message);
+                        window.location.href = "/admin/settings";
+                    }
+                },
+                error: function (response) {
+                    alert("Error: " + response.responseJSON.message);
+                    // Habilitamos nuevamente el botón de guardado
+                    $("#btn-guardar").attr("disabled", false);
+                    $("#btn-guardar").html("Guardar Cambios");
+                }
+            });
+
+        });
+    });
+
+</script>
+{% endblock %}

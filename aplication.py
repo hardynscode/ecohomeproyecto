@@ -66,5 +66,17 @@ def listadoSettingsZonasCasas():
 def listadoSettingsTiposEficiencia():
     return render_template('./admin/settings/tiposEficiencia.html')
 
+@app.route('/admin/settings/paises')
+def listadoSettingsPaises():
+    return render_template('./admin/settings/paises.html')
+
+@app.route('/admin/settings/paises/<pais>/departamentos', methods=['GET'])
+def listadoSettingsDepartamentos(pais):
+    return render_template('./admin/settings/departamentos.html', pais=pais)
+
+@app.route('/admin/settings/paises/<pais>/departamentos/<departamento>/ciudades', methods=['GET'])
+def listadoSettingsCiudades(pais, departamento):
+    return render_template('./admin/settings/ciudades.html', pais=pais, departamento=departamento)
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
