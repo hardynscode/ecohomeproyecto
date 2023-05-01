@@ -54,5 +54,17 @@ def listadoSettings():
 def listadoSettingsTiposTomacorriente():
     return render_template('./admin/settings/tiposTomacorriente.html')
 
+@app.route('/admin/settings/tiposCasas')
+def listadoSettingsTiposCasas():
+    return render_template('./admin/settings/tiposCasas.html')
+
+@app.route('/admin/settings/zonasCasas')
+def listadoSettingsZonasCasas():
+    return render_template('./admin/settings/zonasCasas.html')
+
+@app.route('/admin/settings/tiposEficiencia')
+def listadoSettingsTiposEficiencia():
+    return render_template('./admin/settings/tiposEficiencia.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
