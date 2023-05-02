@@ -1,0 +1,196 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!--Parte crud-->
+
+<main class="main-content">
+    <div class="crud-container">
+        <div class="crud-header">
+
+
+            <h1>Tomacorrientes registrados</h1>
+            <a class="btn btn-success" href="/detailshome/{{idCasa}}/tomacorrientes/new" style="float: right;" id="openRegisterModel"> <b>+ </b>
+                Nuevo tomacorriente
+            </a>
+        </div>
+
+
+        <!-- CRUD TABLAS -->
+
+        <table class="table">
+            <thead>
+            <tbody>
+                <tr>
+                    <th>ID del toma</th>
+                    <th>Nombre</th>
+                    <th>Tipo de enchufe</th>
+                    <th>Electrodomestico</th>
+                    <th>Ubicacion</th>
+                    <th>Opciones</th>
+
+                    <!-- Panel de opciones-->
+
+
+                </tr>
+
+                </thead>
+            </tbody>
+
+
+
+            <th>1</th>
+            <th>P</th>
+            <th>B</th>
+            <th>C</th>
+            <th>N</th>
+            <td>
+                <button class="button is-warning">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="button is-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+
+
+
+        </table>
+
+
+    </div>
+</main>
+
+<!-- Logica -->
+
+<div class="modal" id="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Agregar nuevo tomacorriente</p>
+            <button class="delete" aria-label="close" id="closeRegisterModel"></button>
+        </header>
+        <section class="modal-card-body">
+
+            <!-- Contenido del formulario -->
+            <div class="field">
+                <label class="label">ID del toma</label>
+                <div class="control">
+                    <input class="input" type="number" placeholder="Ingresar ID del toma">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Nombre</label>
+                <div class="control">
+                    <input class="input" type="text" name="nombre" placeholder="Ingresa el nombre">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Tipo de enchufe</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="listaenchufe">
+                            <option>Selecciona el tipo de enchufe</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                            <option value="K">K</option>
+                            <option value="L">L</option>
+                            <option value="M">M</option>
+                            <option value="N">N</option>
+                            <option value="O">O</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="field">
+                <label class="label">Electrodomestico</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="listaelectrodomestico">
+                            <option>Selecciona el tipo de electrodomestico</option>
+
+                            <option value="Nevera">Nevera</option>
+                            <option value="Televisor">Televisor</option>
+                            <option value="Horno microondas">Horno microondas</option>
+                            <option value="Computador">Computador</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ubicacion -->
+
+            <div class="field">
+                <label class="label">Ubicacion</label>
+                <div class="control">
+                    <div class="select">
+                        <select name="listaubicacion">
+                            <option>Selecciona la ubicacion del tomacorriente</option>
+
+                            <option value="Nevera">Sala</option>
+                            <option value="Televisor">Antesala</option>
+                            <option value="Computador">Cuarto</option>
+                            <option value="Horno microondas">Cocina</option>
+                            <option value="Computador">Patio</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <footer class="modal-card-foot">
+            <button type="submit" class="button is-success">
+                <i class="fas fa-save">
+                    <span>Registrar</span>
+                </i>
+            </button>
+            </form>
+        </footer>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="/js/crudjs.js"></script>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_l5RNMxIfnirBM0jsK5fDcOofsrId9lo",
+        authDomain: "pruebacrudadmon.firebaseapp.com",
+        projectId: "pruebacrudadmon",
+        storageBucket: "pruebacrudadmon.appspot.com",
+        messagingSenderId: "667178973804",
+        appId: "1:667178973804:web:9d80f6570430328e22f649",
+        measurementId: "G-N6VYYRJQ2W"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+</script>
+{% endblock %}

@@ -29,6 +29,14 @@ def detailshome():
     idCasa = request.args.get('idCasa')
     return render_template('detailshome.html', idCasa=idCasa)
 
+@app.route('/detailshome/<idCasa>/tomacorrientes')
+def tomacorrientesHome(idCasa):
+    return render_template('listTomacorrientes.html', idCasa=idCasa)
+
+@app.route('/detailshome/<idCasa>/tomacorrientes/new')
+def addTomacorrientesHome(idCasa):
+    return render_template('addTomacorriente.html', idCasa=idCasa)
+
 @app.route('/dcontacto')
 def dcontacto():
     return render_template('dcontacto.html')

@@ -14,39 +14,12 @@
                 <form id="form-detailshome" class="row g-4">
                   <div class="col-12">
                     <label>Nombre de la casa<span class="text-danger" for="nombreCasa">*</span></label>
-
-                    <div class="btn">
-
-                      <style>
-                        .btn {
-                          display: flex;
-                          justify-content: right;
-                          
-                        }
-                      </style>
-
-
-                      <a class="btn btn-primary" href="/templates/paginatomacorrientes.html"" role="button">
-                        <b>+</b>
-                        Agregar tomacorriente
-                      </a>
-                      
-                      
-
-                    </div>
-
-
                     <input type="text" id="nombreCasa" class="form-control"
                       placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" readonly>
                   </div>
                   <div class="col-12">
                     <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>
                     <select class="form-control" id="tipoCasa" name="tipoCasa" required>
-                      <option value="">Seleccione un tipo de casa</option>
-                      <option value="Apartaestudio">Apartaestudio</option>
-                      <option value="Apartamento">Apartamento</option>
-                      <option value="Casa">Casa</option>
-                      <option value="Finca">Finca</option>
                     </select>
                   </div>
                   <div class="col-12">
@@ -57,30 +30,17 @@
                   <div class="col-md-4">
                     <label for="pais">País<span class="text-danger" for="pais"></span>*</span></label>
                     <select name="pais" id="pais" class="form-control" required>
-                      <option value="">Seleccione un país</option>
-                      <option value="colombia">Colombia</option>
-                      <option value="ecuador">Ecuador</option>
                     </select>
                   </div>
                   <div class="col-md-4">
                     <label for="departamento">Departamento <span class="text-danger"
                         for="departamento"></span>*</span></label>
                     <select name="departamento" class="form-control" id="departamento" required>
-                      <option value="">Seleccione un departamento</option>
-                      <option value="Antioquia">Antioquia</option>
-                      <option value="Quindio">Quindio</option>
-                      <option value="Cundinamarca">Cundinamarca</option>
                     </select>
                   </div>
                   <div class="col-md-4">
                     <label for="ciudad">Ciudad <span class="text-danger" for="ciudad"></span>*</span></label>
                     <select name="ciudad" class="form-control" id="ciudad" required>
-                      <option value="">Seleccione una ciudad</option>
-                      <option value="Medellín">Medellín</option>
-                      <option value="Bogota">Bogotá</option>
-                      <option value="Armenia">Armenia</option>
-                      <option value="Circasia">Circasia</option>
-                      <option value="Envigado">Envigado</option>
                     </select>
                   </div>
                   <div class="col-12">
@@ -91,10 +51,12 @@
                 </form>
               </div>
             </div>
-            <div class="col-md-4 ps-0 d-none d-md-block">
-              <div class="form-right h-100 bg-transparent text-black text-center pt-5">
-
-              </div>
+            <div class="col-md-4 pt-5 d-md-block">
+              
+                <a class="btn btn-primary mt-3" href="/detailshome/{{idCasa}}/tomacorrientes">
+                  <i class="fa fa-plug"></i>  Administrar Tomacorrientes
+                </a>
+              
             </div>
           </div>
         </div>
@@ -106,9 +68,33 @@
 {% endblock %}
 
 {% block scripts %}
+
+<script type="text/javascript" src="{{url_for('static', filename='js/homeSettings.js')}}"></script>
+
 <script type="text/javascript">
+  const editando = true;
+  let dataCasa = null;
+
+  function cargarTipoCasa() {
+    $("#tipoCasa").val(dataCasa.tipoCasa);
+  }
+
+  function cargarPais() {
+    $("#pais").val(dataCasa.pais);
+    $("#pais").trigger("change");
+  }
+
+  function cargarDepartamento() {
+    $("#departamento").val(dataCasa.departamento);
+    $("#departamento").trigger("change");
+  }
+
+  function cargarCiudad() {
+    $("#ciudad").val(dataCasa.ciudad);
+  }
 
   $(document).ready(function () {
+
     // obtenemos la informacion del usuario del local storage
     const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
 
@@ -119,16 +105,13 @@
     $.get("http://127.0.0.1:5000/api/users/" + identificacion + "/houses/" + nombreCasa, function (data) {
 
       if (data) {
+        dataCasa = data;
         $("#nombreCasa").val(data.nombreCasa);
-        $("#tipoCasa").val(data.tipoCasa);
         $("#direccion").val(data.direccion);
-        $("#pais").val(data.pais);
-        $("#departamento").val(data.departamento);
-        $("#ciudad").val(data.ciudad);
       }
     });
 
-
+    // Codigo para recolectar la dara y enviarla al api para actualizar la casa
     $("#form-detailshome").submit(function (evento) {
       evento.preventDefault();
 
@@ -174,12 +157,11 @@
 
           $("#btn-detailshome").attr("disabled", false);
           $("#btn-detailshome").html("Actualizar");
-        },
-
+        }
       });
-
     });
 
+    // Codigo para solicitar al api eliminar la casa
     $("#eliminar-casa").click(function () {
       const eliminar = confirm("Desea eliminar esta casa?");
 
@@ -207,7 +189,6 @@
         });
       }
     });
-
 
   });
 </script>
