@@ -15,15 +15,13 @@
             <thead>
                 <tr>
                     <th scope='col'>Identificación</th>
-                    <th scope='col'>Nombre 1</th>
-                    <th scope='col'>Nombre 2</th>
-                    <th scope='col'>Apellido 1</th>
-                    <th scope='col'>Apellido 2</th>
+                    <th scope='col'>Nombres</th>
+                    <th scope='col'>Apellidos</th>
                     <th scope='col'>Correo</th>
                     <th scope='col'>Celular</th>
                     <th scope='col'>Fecha Nacimiento</th>
                     <th scope='col'>Rol</th>
-                    <th scope='col'>Opciones</th>
+                    <th scope='col' width="100px">Opciones</th>
                 </tr>
             </thead>
             <tbody id="users-container">
@@ -55,16 +53,14 @@
 
                         content += "<tr> " +
                             "<td>"+ (user.identificacion || '') +"</td>" +
-                            "<td>"+ (user.nombre1 || '') +"</td>" +
-                            "<td>"+ (user.nombre2 || '') +"</td>" +
-                            "<td>"+ (user.apellido1 || '') +"</td>" +
-                            "<td>"+ (user.apellido2 || '') +"</td>" +
+                            "<td>"+ (user.nombre1 || '') + (user.nombre2 || '') + "</td>" +
+                            "<td>"+ (user.apellido1 || '') + (user.apellido2 || '') + "</td>" +
                             "<td>"+ (user.correo || '') +"</td>" +
                             "<td>"+ (user.celular || '') +"</td>" +
                             "<td>"+ (user.fechaNacimiento || '') +"</td>" +
                             "<td>"+ (user.rol || 'cliente') +"</td>" +
                             "<td>" +
-                                "<a class='btn btn-sm btn-success' href='#'><i class='fa fa-eye mr-2'></i></a>"+
+                                "<a class='btn btn-sm btn-success mr-2' href='#'><i class='fa fa-eye'></i></a>"+
                                 "<a class='btn btn-sm btn-danger' href='#'><i class='fa fa-trash'></i></a>"+
                             "</td>" +
                             "</tr>";

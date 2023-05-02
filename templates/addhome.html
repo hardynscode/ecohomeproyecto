@@ -5,150 +5,129 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-10 offset-lg-1">
-        
+
         <div class="bg-white shadow rounded">
           <div class="row">
             <div class="col-md-8 pe-0">
               <div class="form-left h-100 py-5 px-5">
                 <h3 class="mb-3">Crear una nueva casa</h3>
-                <form  id="formulario-newhome"class="row g-4">
+                <form id="formulario-newhome" class="row g-4">
                   <div class="col-12">
                     <label>Nombre de la casa<span class="text-danger" for="nombreCasa">*</span></label>
-                    <input type="text" id="nombreCasa"class="form-control" placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" >
+                    <input type="text" id="nombreCasa" class="form-control"
+                      placeholder="Ingrese el nombre con el que desea llamar su casa" required="required">
                   </div>
                   <div class="col-12">
-                    <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>     
+                    <label>Tipo de casa<span class="text-danger" for="tipoCasa">*</span></label>
                     <select class="form-control" id="tipoCasa" name="tipoCasa" required>
-                      <option value="">Seleccione un tipo de casa</option>
-                      <option value="Apartaestudio">Apartaestudio</option>
-                      <option value="Apartamento">Apartamento</option>
-                      <option value="Casa">Casa</option>
-                      <option value="Finca">Finca</option>
-                    </select>                              
+                    </select>
                   </div>
                   <div class="col-12">
-                    <label for="direccion" class="titulo">Dirección <span class="text-danger" for="direccion">*</span></label>
+                    <label for="direccion" class="titulo">Dirección <span class="text-danger"
+                        for="direccion">*</span></label>
                     <input type="text" class="form-control" id="direccion" name="direccion" required>
                   </div>
                   <div class="col-md-4">
                     <label for="pais">País<span class="text-danger" for="pais"></span>*</span></label>
                     <select name="pais" id="pais" class="form-control" required>
-                      <option value="">Seleccione un país</option>
-                      <option value="colombia">Colombia</option>
-                      <option value="ecuador">Ecuador</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-md-4">
-                    <label for="departamento">Departamento <span class="text-danger" for="departamento"></span>*</span></label>
+                    <label for="departamento">Departamento <span class="text-danger"
+                        for="departamento"></span>*</span></label>
                     <select name="departamento" class="form-control" id="departamento" required>
-                      <option value="">Seleccione un departamento</option>
-                      <option value="Antioquia">Antioquia</option>
-                      <option value="Quindio">Quindio</option>
-                      <option value="Cundinamarca">Cundinamarca</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-md-4">
                     <label for="ciudad">Ciudad <span class="text-danger" for="ciudad"></span>*</span></label>
                     <select name="ciudad" class="form-control" id="ciudad" required>
-                      <option value="">Seleccione una ciudad</option>
-                      <option value="Medellín">Medellín</option>
-                      <option value="Bogota">Bogotá</option>
-                      <option value="Armenia">Armenia</option>
-                      <option value="Circasia">Circasia</option>
-                      <option value="Envigado">Envigado</option>
-                    </select>  
+                    </select>
                   </div>
                   <div class="col-12">
                     <form>
-                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn btn-success px-4 float-end">Guardar</button>
+                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html"
+                        class="btn btn-success px-4 float-end">Guardar</button>
                     </form>
                   </div>
                 </form>
               </div>
-          </div>
-          <div class="col-md-4 ps-0 d-none d-md-block">
+            </div>
+            <div class="col-md-4 ps-0 d-none d-md-block">
               <div class="form-right h-100 bg-transparent text-black text-center pt-5">
               </div>
+            </div>
           </div>
+        </div>
+        <p class="text-end text-secondary mt-3"></p>
       </div>
+    </div>
   </div>
-      <p class="text-end text-secondary mt-3"></p>
-  </div>
-  </div>
-  </div>           
 </section>
 {% endblock %}
 
 {% block scripts %}
 
-<script type="text/javascript">
-  $(document).ready(function(){
+<script type="text/javascript" src="{{url_for('static', filename='js/homeSettings.js')}}"></script>
 
-    $("#formulario-newhome").submit(function(evento){
+<script type="text/javascript">
+  const editando = false;
+  
+  $(document).ready(function () {
+
+    // Evento para enviar la data a crear
+    $("#formulario-newhome").submit(function (evento) {
       evento.preventDefault();
 
-       // Deshabilitamos el botón de guardar y cambiamos su texto
+      // Deshabilitamos el botón de guardar y cambiamos su texto
       const $btnAddHome = $("#btn-addhome");
       $("#btn-addhome").attr("disabled", true);
       $("#btn-addhome").html("Espere..");
 
-      
+
 
       // Obtenemos los valores de los campos de entrada
       const nombreCasa = $("#nombreCasa").val();
       const tipoCasa = $('#tipoCasa').val();
       const direccion = $("#direccion").val();
-      const pais = $("#pais option:selected").val();    
+      const pais = $("#pais option:selected").val();
       const departamento = $("#departamento option:selected").val();
-      const ciudad= $("#ciudad option:selected").val();
-     
+      const ciudad = $("#ciudad option:selected").val();
+
       // obtenemos la informacion del usuario del local storage
-      const usuario = JSON.parse(localStorage.getItem('user-ecohome'));  
+      const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
       const identificacion = usuario.identificacion;
 
       const data = JSON.stringify({
         nombreCasa: nombreCasa,
         tipoCasa: tipoCasa,
-        direccion: direccion ,
+        direccion: direccion,
         pais: pais,
         departamento: departamento,
         ciudad: ciudad
       });
 
-      console.log(data);
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        data: data,
+        success: function (response) {
+          console.log(response);
+          window.location.href = "home";
+        },
+        error: function (response) {
+          alert(response.responseJSON.message);
 
-        $.ajax({
-          type: "POST",
-          url: "http://127.0.0.1:5000/api/users/"+identificacion+"/houses",
-          dataType: "json",
-          contentType: "application/json; charset=utf-8",
-          async: true,
-          data: data,
-          success: function (response) {
-            console.log(response);
-            window.location.href = "home";
-          },
-          error: function (response) {
-            alert(response.responseJSON.message);
+          $("#btn-addhome").attr("disabled", false);
+          $("#btn-addhome").html("Guardar");
+        }
+      });
 
-            $("#btn-addhome").attr("disabled", false);
-            $("#btn-addhome").html("Guardar");
-          },
-          
-        });
+    });
 
-    })
-
-  })
+  });
 </script>
 
 {% endblock %}
-
-
-
-
- 
-    
-
-    
-</html>
