@@ -8,7 +8,8 @@
 	<title< /title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 			integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+    <link rel="stylesheet" href="../static/css/main.css">
+    </head>
 
 <body>
 
@@ -46,156 +47,93 @@
 
 	<!-- Menú de tomacorrientes -->
 
-	<div class="container">
+<section class="vh-50 ">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 offset-lg-1">
+        
+        <div class="bg-white shadow rounded">
+          <div class="row">
+            <div class="col-md-8 pe-0">
+              <div class="form-left h-100 py-5 px-5">
+                <h3 class="mb-3">Crear un nuevo tomacorriente</h3>
+                <form  id="formulario-newhome"class="row g-4">
+                  <div class="col-12">
+                    <label>Nombre del tomacorriente<span class="text-danger" for="nombreenchufe">*</span></label>
+                    <input type="text" id="nombreenchufe"class="form-control" placeholder="Ingrese el nombre con el que va a llamar su tomacorriente" required="required">
+                  </div>
+                  <div class="col-12">
+                    <br>
+                    <label>Tipo de tomacorriente<span class="text-danger" for="tipoenchufe">*</span></label>     
+                    <select class="form-control" id="tipoenchufe" name="tipoenchufe" required>
+                      <option value="">Seleccione un tipo de tomacorriente</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                      <option value="E">E</option>
+                      <option value="F">F</option>
+                      <option value="G">G</option>
+                      <option value="H">H</option>
+                      <option value="I">I</option>
+                      <option value="J">J</option>
+                      <option value="K">K</option>
+                      <option value="L">L</option>
+                      <option value="M">M</option>
+                      <option value="N">N</option>
+                      <option value="O">O</option>
+                    </select>                              
+                  </div>
+                  <div class="col-12">
+                    <br>
+                    <label for="electrodomestico" class="titulo">Tipo de electrodomestico <span class="text-danger" for="electrodomestico">*</span></label>
+                    
+                    <!-- Lista desplegable -->
+                    <select class="form-control" id="electrodomestico" name="electrodomestico" required>
+                      <option value="Seleccionar">Seleccione un tipo de electrodomestico</option>
+                      <option value="Nevera">Nevera</option>
+                      <option value="Televisor">Televisor</option>
+                      <option value="HornoMicroondas">Computador</option>
+                      <option value="Computador">Horno microondas</option>
+
+                    </select>
 
 
-		<form class="row mt-3 g-3 needs-validation">
+                  </div>
 
-			<div class="col-12">
-				<label for="idtoma" class="form-label">ID del toma</label>
-				<input type="text" class="form-control" id="idtoma" required>
-
-				<div class="valid-feedback">
-					Todo bien
-
-					<div class="invalid-feedback">
-						Es necesario poner el ID del toma
-
-					</div>
-				</div>
-
-				<!-- Validacion del nombre del enchufe  -->
-
-				<div>
-					<div class="col-12">
-						<label>Nombre <span class="text-danger" for="nombreenchufe">*</span></label>
-						<input type="text" class="form-control" id="nombreenchufe" required>
-
-						<div class="valid-feedback">
-							Todo bien
-
-							<div class="invalid-feedback">
-								Es necesario poner el nombre del enchufe
-
-							</div>
-						</div>
-					</div>
-
-					<!-- Validacion tipo de enchufe -->
-
-					<div class="col-12">
-						<label>Tipo de enchufe <span class="text-danger" for="tipoEnchufe">*</span></label>
-						<select class="form-control" id="tipoEnchufe" name="tipoEnchufe" required>
-							<option value="">Seleccione un tipo de enchufe</option>
-							<option value="A">A</option>
-							<option value="B">B</option>
-							<option value="C">C</option>
-							<option value="D">D</option>
-							<option value="E">E</option>
-							<option value="F">F</option>
-							<option value="G">G</option>
-							<option value="H">H</option>
-							<option value="I">I</option>
-							<option value="J">J</option>
-							<option value="K">K</option>
-							<option value="L">L</option>
-							<option value="M">M</option>
-							<option value="N">N</option>
-							<option value="O">O</option>
-						</select>
-					</div>
-
-
-					<div class="valid-feedback">
-						Todo bien
-
-						<div class="invalid-feedback">
-							Es necesario poner el tipo de enchufe
-
-						</div>
-					</div>
-
-
-
-					<!-- Validacion electrodomestico -->
-
-					<div class="col-12">
-						<label>Tipo de electrodomestico<span class="text-danger" for="tipoElectrodomestico">*</span></label>
-						<select class="form-control" id="tipoElectrodomestico" name="tipoElectrodomestico" required>
-							<option value="">Seleccione un tipo de electrodomestico</option>
-							<option value="Nevera">Nevera</option>
-							<option value="Televisor">Televisor</option>
-							<option value="Horno microondas">Horno microondas</option>
-							<option value="Computador">Computador</option>
-						</select>
-					</div>
-
-
-					<div class="col-12">
-		
-						
-
-						<!-- Validacion de la ubicacion  -->
-
-						<div class="col-12">
-							<label>Ubicacion<span class="text-danger" for="ubicacion"> *</span></label>
-						<select class="form-control" id="ubicacion" name="ubicacion" required>
-							<option value="">Seleccione la ubicacion</option>
-								<option value="Nevera">Sala</option>
-								<option value="Televisor">Antesala</option>
-								<option value="Computador">Cuarto</option>
-								<option value="Horno microondas">Cocina</option>
-								<option value="Computador">Patio</option>
-							</select>
-						</div>
-
-						
-						<div>
-							<br>
-							<button type="submit" class="btn btn-primary">Enviar</button>
-
-						</div>
-
-						<br>
-						<label for="aviso">Los campos con  <span class="text-danger">*</span> son obligatorios
-						
-					</label>
-					</div>
-
-		</form>
-
-	</div>
-
-
-	<!-- Validacion con JS -->
-
-	<script>
-		// Example starter JavaScript for disabling form submissions if there are invalid fields
-		(function () {
-			'use strict';
-			window.addEventListener('load', function () {
-				// Fetch all the forms we want to apply custom Bootstrap validation styles to
-				var forms = document.getElementsByClassName('needs-validation');
-				// Loop over them and prevent submission
-				var validation = Array.prototype.filter.call(forms, function (form) {
-					form.addEventListener('submit', function (event) {
-						if (form.checkValidity() === false) {
-							event.preventDefault();
-							event.stopPropagation();
-						}
-						form.classList.add('was-validated');
-					}, false);
-				});
-			}, false);
-		})();
-	</script>
-
-
-
-
-
-
-
+                  <div class="col-md-10">
+                    <br>
+                    <label for="ubicacion">Ubicacion del tomacorriente <span class="text-danger" for="ubicacion">*</span></label>
+                    <select name="ubicacion" class="form-control" id="ubicacion" required>
+                      <option value="">Seleccione una ubicacion</option>
+                      <option value="Antioquia">Cocina</option>
+                      <option value="Quindio">Sala</option>
+                      <option value="Cundinamarca">Patio</option>
+                      <option value="Cundinamarca">Antesala</option>
+                    </select>  
+                  </div>
+                  
+                  <div class="col-12">
+                    <form>
+                      <br>
+                      <button type="submit" id="btn-addhome" formaction="/templates/layout.html" class="btn btn-success px-4 float-end">Guardar</button>
+                      <br>
+                    </form>
+                  </div>
+                </form>
+              </div>
+          </div>
+          <div class="col-md-4 ps-0 d-none d-md-block">
+              <div class="form-right h-100 bg-transparent text-black text-center pt-5">
+              </div>
+          </div>
+      </div>
+  </div>
+      <p class="text-end text-secondary mt-3"></p>
+  </div>
+  </div>
+  </div>           
+</section>
 
 </body>
 
