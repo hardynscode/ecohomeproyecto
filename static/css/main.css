@@ -54,3 +54,7 @@ a {
     outline: none;
     border-color: #6fbced;
 }
+
+.mr-2 {
+    margin-right: 12px;
+}
