@@ -37,6 +37,14 @@ def tomacorrientesHome(idCasa):
 def addTomacorrientesHome(idCasa):
     return render_template('addTomacorriente.html', idCasa=idCasa)
 
+@app.route('/detailshome/<idCasa>/electrodomesticos')
+def electrodomesticosHome(idCasa):
+    return render_template('listElectrodomesticos.html', idCasa=idCasa)
+
+@app.route('/detailshome/<idCasa>/electrodomesticos/new')
+def addElectrodomesticoHome(idCasa):
+    return render_template('addElectrodomestico.html', idCasa=idCasa)
+
 @app.route('/dcontacto')
 def dcontacto():
     return render_template('dcontacto.html')

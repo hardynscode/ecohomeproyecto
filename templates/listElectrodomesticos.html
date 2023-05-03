@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item position-relative">
+    <nav aria-label="breadcrumb px-5">
+        <ol class="breadcrumb px-3">
+            <li class="breadcrumb-item btn-ir-home"><a href="/home">Home</a></li>
+            <li class="breadcrumb-item"><a href="/detailshome?idCasa={{idCasa}}">{{idCasa}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Electrodomesticos</li>
+        </ol>
+    </nav>
+
+    <h4 class="text-dark e font-weight-medium px-3">Electrodomesticos - {{idCasa}}</h4>
+    <div class="service py-4 px-2">
+        <h6 class="text-dark e font-weight-medium px-3">Estos son los Electrodomesticos creados en la casa {{idCasa}}:
+            <a href="/detailshome/{{idCasa}}/electrodomesticos/new" class="btn btn-success" style="float: right;">Agregar
+                Electrodomestico</a>
+        </h6>
+    </div>
+</div>
+
+<div class="col-lg-12 py-2 px-4 p-lg-5">
+    <table class='table table-responsive table-condensed table-bordered'>
+        <thead>
+            <tr>
+                <th scope='col'>#</th>
+                <th scope='col'>Fecha Creación</th>
+                <th scope='col'>Tipo Electrodomestico</th>
+                <th scope='col'>Tipo Eficiencia</th>
+                <th scope='col'>kWh/mes</th>
+                <th scope='col'>Tomacorriente Actual</th>
+                <th scope="col">Estado de Conexion</th>
+                <th scope='col' width="100px">Opciones</th>
+            </tr>
+        </thead>
+        <tbody id="list-container">
+            <tr><td colspan="8">Cargando...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        // obtenemos la informacion del usuario del local storage
+        const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+
+        const identificacion = usuario.identificacion;
+
+        let tomacorrientes = [];
+        // cargamos los tomacorrientes 
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/tomacorrientes",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+                tomacorrientes = response;
+                cargarElectrodomesticos();
+            },
+            error: function (response) {
+                console.log(response.responseJSON.message);
+            }
+        });
+
+        function cargarElectrodomesticos() {
+            // Consultamos los Electrodomesticos
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                async: true,
+                success: function (response) {
+
+                    const registros = response;
+                    let content = "";
+
+                    if (registros) {
+                        for (let index = 0; index < registros.length; index++) {
+                            const elemento = registros[index];
+                            if (elemento) {
+                                let descripcionTomaActual = "";
+                                if (tomacorrientes.length > 0) {
+                                    const tomaActual = tomacorrientes[elemento.tomacorrienteActual];
+                                    if (tomaActual) {
+                                        descripcionTomaActual = "<b>Zona:</b> " + tomaActual.zona + " - <b>Tipo:</b> " + tomaActual.tipo + " <br> <b>Descripcion: </b>" + tomaActual.descripcion;
+                                    }
+                                }
+
+                                content += "<tr id='fila-" + elemento.index + "'> " +
+                                    "<td>" + (elemento.index || '') + "</td>" +
+                                    "<td>" + (elemento.fechaCreacion || '') + "</td>" +
+                                    "<td>" + (elemento.tipoElectrodomestico || '') + "</td>" +
+                                    "<td>" + (elemento.tipoEficiencia || '') + "</td>" +
+                                    "<td>" + (elemento.kwhMes || '') + "</td>" +
+                                    "<td>" + descripcionTomaActual + "</td>" +
+                                    "<td>" + (elemento.estadoConexion || '') + "</td>" +
+                                    "<td>" +
+                                    "<a class='btn btn-sm btn-success mr-2 d-none' href='#'><i class='fa fa-edit'></i></a>" +
+                                    "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
+                                    "</td>" +
+                                    "</tr>";
+                            }
+
+                        }
+                        $("#list-container").html(content);
+                    } else {
+                        $("#list-container").html("<tr><td colspan='7'>No hay elementos registrados</td></tr>");
+                    }
+
+
+                },
+                error: function (response) {
+                    console.log(response.responseJSON.message);
+                }
+            });
+        }
+
+        // Codigo para solicitar al api eliminar un electrodomestico
+        $("#list-container").on("click", ".eliminar", function () {
+            const idRegistro = $(this).attr("registro-id");
+
+            const eliminar = confirm("Desea eliminar este electrodomestico?");
+
+            if (eliminar) {
+
+                $.ajax({
+                    type: "DELETE",
+                    url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro,
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    async: true,
+                    success: function (response) {
+                        $("#fila-" + idRegistro).remove();
+                    },
+                    error: function (response) {
+                        alert(response.responseJSON.message);
+                    }
+                });
+            }
+
+        });
+    });
+
+</script>
+{% endblock %}
