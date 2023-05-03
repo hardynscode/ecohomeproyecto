@@ -5,13 +5,13 @@
     <nav aria-label="breadcrumb px-5">
         <ol class="breadcrumb px-3">
             <li class="breadcrumb-item btn-ir-home"><a href="/home">Home</a></li>
-            <li class="breadcrumb-item"><a href="/detailshome?idCasa={{idCasa}}">{{idCasa}}</a></li>
+            <li class="breadcrumb-item"><a href="/detailshome/{{idCasa}}">{{idCasa}}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Tomacorrientes</li>
         </ol>
     </nav>
 
     <h4 class="text-dark e font-weight-medium px-3">Tomacorrientes - {{idCasa}}</h4>
-    <div class="service py-2 px-2">
+    <div class="service py-4 px-2">
         <h6 class="text-dark e font-weight-medium px-3">Estos son los tomacorrientes creados en la casa {{idCasa}}:
             <a href="/detailshome/{{idCasa}}/tomacorrientes/new" class="btn btn-success" style="float: right;">Agregar
                 Tomacorriente</a>
@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<div class="row col-lg-12 py-2 px-2 p-lg-5">
+<div class="col-lg-12 py-2 px-4 p-lg-5">
     <table class='table table-responsive table-condensed table-bordered'>
         <thead>
             <tr>
@@ -73,19 +73,21 @@
                 if (registros) {
                     for (let index = 0; index < registros.length; index++) {
                         const elemento = registros[index];
+                        if (elemento) {
 
-                        content += "<tr id='fila-" + elemento.index + "'> " +
-                            "<td>" + (elemento.index || '') + "</td>" +
-                            "<td>" + (elemento.fechaCreacion || '') + "</td>" +
-                            "<td>" + (elemento.tipo || '') + "</td>" +
-                            "<td>" + (elemento.zona || '') + "</td>" +
-                            "<td>" + (elemento.descripcion || '') + "</td>" +
-                            "<td>" + (elemento.estado || '') + "</td>" +
-                            "<td>" +
-                            "<a class='btn btn-sm btn-success mr-2' href='#'><i class='fa fa-edit'></i></a>" +
-                            "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
-                            "</td>" +
-                            "</tr>";
+                            content += "<tr id='fila-" + elemento.index + "'> " +
+                                "<td>" + (elemento.index || '') + "</td>" +
+                                "<td>" + (elemento.fechaCreacion || '') + "</td>" +
+                                "<td>" + (elemento.tipo || '') + "</td>" +
+                                "<td>" + (elemento.zona || '') + "</td>" +
+                                "<td>" + (elemento.descripcion || '') + "</td>" +
+                                "<td>" + (elemento.estado || '') + "</td>" +
+                                "<td>" +
+                                "<a class='btn btn-sm btn-success mr-2 d-none' href='#'><i class='fa fa-edit'></i></a>" +
+                                "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
+                                "</td>" +
+                                "</tr>";
+                        }
 
                     }
                     $("#list-container").html(content);

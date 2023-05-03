@@ -1,151 +1,198 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="service-item position-relative">
+	<nav aria-label="breadcrumb px-5">
+		<ol class="breadcrumb px-3">
+			<li class="breadcrumb-item btn-ir-home"><a href="/home">Home</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome/{{idCasa}}">{{idCasa}}</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome/{{idCasa}}/tomacorrientes">Tomacorrientes</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Crear Tomacorriente</li>
+		</ol>
+	</nav>
 
-<!-- Menú de tomacorrientes -->
+	<h4 class="text-dark e font-weight-medium px-3">Crear Nuevo Tomacorriente:</h4>
+	<div class="service py-4 px-2">
+		<h6 class="text-dark e font-weight-medium px-3">Estos diligencie toda la información requerida:</h6>
+	</div>
+</div>
 
-<div class="container">
+<section class="vh-50 ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 offset-lg-1">
 
+				<div class="bg-white shadow rounded">
+					<div class="row">
+						<div class="col-md-8 pe-0">
+							<div class="form-left h-100 py-5 px-5">
+								<form class="row g-4" id="form-creacion-toma">
+									<div class="col-12">
+										<label>Ubicacion (Zona de la Casa)<span class="text-danger" for="zona">
+												*</span></label>
+										<select class="form-control" id="zona" name="zona" required>
+										</select>
+									</div>
 
-	<form class="row mt-3 g-3 needs-validation">
+									<div class="col-12">
+										<label>Tipo de enchufe <span class="text-danger"
+												for="tipoTomacorriente">*</span></label>
+										<select class="form-control" id="tipoTomacorriente" name="tipoTomacorriente"
+											required>
+										</select>
+									</div>
 
-		<div class="col-12">
-			<label for="idtoma" class="form-label">ID del toma</label>
-			<input type="text" class="form-control" id="idtoma" required>
+									<div class="col-12">
+										<label>Descripción Adicional <span class="text-danger"
+												for="descripcion">*</span></label>
+										<input type="text" class="form-control" id="descripcion" required>
+									</div>
 
-			<div class="valid-feedback">
-				Todo bien
+									<div class="col-12">
+										<label>Estado<span class="text-danger"
+												for="tipoElectrodomestico">*</span></label>
+										<select class="form-control" id="estado" name="estado" required>
+											<option value="activo">Activo</option>
+											<option value="inactivo">Inactivo</option>
+										</select>
+									</div>
 
-				<div class="invalid-feedback">
-					Es necesario poner el ID del toma
+									<div class="col-12">
+										<button type="submit" class="btn btn-success" id="btn-crear"
+											style="float: right;">Crear Tomacorriente</button>
+									</div>
 
-				</div>
-			</div>
-
-			<!-- Validacion del nombre del enchufe  -->
-
-			<div>
-				<div class="col-12">
-					<label>Nombre <span class="text-danger" for="nombreenchufe">*</span></label>
-					<input type="text" class="form-control" id="nombreenchufe" required>
-
-					<div class="valid-feedback">
-						Todo bien
-
-						<div class="invalid-feedback">
-							Es necesario poner el nombre del enchufe
-
+								</form>
+							</div>
+						</div>
+						<div class="col-md-4 ps-0 d-none d-md-block">
+							<div class="form-right h-100 bg-transparent text-black text-center pt-5">
+							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- Validacion tipo de enchufe -->
-
-				<div class="col-12">
-					<label>Tipo de enchufe <span class="text-danger" for="tipoEnchufe">*</span></label>
-					<select class="form-control" id="tipoEnchufe" name="tipoEnchufe" required>
-						<option value="">Seleccione un tipo de enchufe</option>
-						<option value="A">A</option>
-						<option value="B">B</option>
-						<option value="C">C</option>
-						<option value="D">D</option>
-						<option value="E">E</option>
-						<option value="F">F</option>
-						<option value="G">G</option>
-						<option value="H">H</option>
-						<option value="I">I</option>
-						<option value="J">J</option>
-						<option value="K">K</option>
-						<option value="L">L</option>
-						<option value="M">M</option>
-						<option value="N">N</option>
-						<option value="O">O</option>
-					</select>
-				</div>
-
-
-				<div class="valid-feedback">
-					Todo bien
-
-					<div class="invalid-feedback">
-						Es necesario poner el tipo de enchufe
-
-					</div>
-				</div>
-
-
-
-				<!-- Validacion electrodomestico -->
-
-				<div class="col-12">
-					<label>Tipo de electrodomestico<span class="text-danger" for="tipoElectrodomestico">*</span></label>
-					<select class="form-control" id="tipoElectrodomestico" name="tipoElectrodomestico" required>
-						<option value="">Seleccione un tipo de electrodomestico</option>
-						<option value="Nevera">Nevera</option>
-						<option value="Televisor">Televisor</option>
-						<option value="Horno microondas">Horno microondas</option>
-						<option value="Computador">Computador</option>
-					</select>
-				</div>
-
-
-				<div class="col-12">
-
-
-
-					<!-- Validacion de la ubicacion  -->
-
-					<div class="col-12">
-						<label>Ubicacion<span class="text-danger" for="ubicacion"> *</span></label>
-						<select class="form-control" id="ubicacion" name="ubicacion" required>
-							<option value="">Seleccione la ubicacion</option>
-							<option value="Nevera">Sala</option>
-							<option value="Televisor">Antesala</option>
-							<option value="Computador">Cuarto</option>
-							<option value="Horno microondas">Cocina</option>
-							<option value="Computador">Patio</option>
-						</select>
-					</div>
-
-
-					<div>
-						<br>
-						<button type="submit" class="btn btn-primary">Enviar</button>
-
-					</div>
-
-					<br>
-					<label for="aviso">Los campos con <span class="text-danger">*</span> son obligatorios
-
-					</label>
-				</div>
-
-	</form>
-
-</div>
+				<p class="text-end text-secondary mt-3"></p>
+			</div>
+		</div>
+	</div>
+</section>
 {% endblock %}
 
 {% block scripts %}
 
 <script type="text/javascript">
-	// Example starter JavaScript for disabling form submissions if there are invalid fields
-	(function () {
-		'use strict';
-		window.addEventListener('load', function () {
-			// Fetch all the forms we want to apply custom Bootstrap validation styles to
-			var forms = document.getElementsByClassName('needs-validation');
-			// Loop over them and prevent submission
-			var validation = Array.prototype.filter.call(forms, function (form) {
-				form.addEventListener('submit', function (event) {
-					if (form.checkValidity() === false) {
-						event.preventDefault();
-						event.stopPropagation();
+
+	const editando = false;
+	const dataToma = null;
+
+	$(document).ready(function () {
+
+		// Cargar las zonas de casas y despegarlos en el selector de ubicación
+		$.ajax({
+			type: "GET",
+			url: "http://127.0.0.1:5000/api/settings?tipo=zonasCasas",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			async: true,
+			success: function (response) {
+
+				const registros = response;
+				let content = "<option value=''>Seleccione..</option>";
+
+				for (const key in registros) {
+					if (Object.hasOwnProperty.call(registros, key)) {
+						const elemento = registros[key];
+						content += "<option value='" + key + "'>" + elemento + "</option>";
 					}
-					form.classList.add('was-validated');
-				}, false);
+				}
+				$("#zona").html(content);
+
+				if (editando == true && dataToma) {
+					cargarZona();
+				}
+			},
+			error: function (response) {
+				console.log(response.responseJSON.message);
+			}
+		});
+
+		// Cargar los tipos de tomacorrientes y despegarlos en el selector de tipos
+		$.ajax({
+			type: "GET",
+			url: "http://127.0.0.1:5000/api/settings?tipo=tiposTomacorriente",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			async: true,
+			success: function (response) {
+
+				const registros = response;
+				let content = "<option value=''>Seleccione..</option>";
+
+				for (const key in registros) {
+					if (Object.hasOwnProperty.call(registros, key)) {
+						const elemento = registros[key];
+						content += "<option value='" + key + "'>" + elemento.nombre + " (" + elemento.descripcion + ")</option>";
+					}
+				}
+				$("#tipoTomacorriente").html(content);
+
+				if (editando == true && dataToma) {
+					cargarTipoTomacorriente();
+				}
+			},
+			error: function (response) {
+				console.log(response.responseJSON.message);
+			}
+		});
+
+		// Evento para enviar la data a crear el tomacorriente
+		$("#form-creacion-toma").submit(function (evento) {
+			evento.preventDefault();
+
+			// Deshabilitamos el botón de guardar y cambiamos su texto
+			const btnCrear = $("#btn-crear");
+			btnCrear.attr("disabled", true);
+			btnCrear.html("Espere..");
+
+			// Obtenemos los valores de los campos de entrada
+			const zona = $("#zona").val();
+			const tipo = $('#tipoTomacorriente').val();
+			const descripcion = $("#descripcion").val();
+			const estado = $("#estado").val();
+
+			// obtenemos la informacion del usuario del local storage
+			const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+			const identificacion = usuario.identificacion;
+
+			const data = JSON.stringify({
+				zona,
+				tipo,
+				descripcion,
+				estado
 			});
-		}, false);
-	})();
+
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/tomacorrientes",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				data: data,
+				success: function (response) {
+					console.log(response);
+					window.location.href = "/detailshome/{{idCasa}}/tomacorrientes";
+				},
+				error: function (response) {
+					alert(response.responseJSON.message);
+
+					btnCrear.attr("disabled", false);
+					btnCrear.html("Crear Tomacorriente");
+				}
+			});
+
+		});
+	});
+
 </script>
 {% endblock %}
 

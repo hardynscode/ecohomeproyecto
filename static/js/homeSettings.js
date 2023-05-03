@@ -1,33 +1,4 @@
 $(document).ready(function () {
-    // Cargar los tipos de casas y despegarlos en el selector de tipos
-    $.ajax({
-        type: "GET",
-        url: "http://127.0.0.1:5000/api/settings?tipo=tiposDeCasas",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        async: true,
-        success: function (response) {
-
-            const tipos = response;
-            let content = "<option value=''>Seleccione el tipo de la casa..</option>";
-
-            for (const key in tipos) {
-                if (Object.hasOwnProperty.call(tipos, key)) {
-                    const tipoCasa = tipos[key];
-                    content += "<option value='" + key + "'>" + tipoCasa + "</option>";
-                }
-            }
-            $("#tipoCasa").html(content);
-
-            if (editando == true && dataCasa) {
-                cargarTipoCasa();
-            }
-        },
-        error: function (response) {
-            console.log(response.responseJSON.message);
-        }
-    });
-
     // Cargar los paises en la DB y despegarlos en el selector de paises
     $.ajax({
         type: "GET",
@@ -126,7 +97,34 @@ $(document).ready(function () {
                 console.log(response.responseJSON.message);
             }
         });
+    });
+    
+    // Cargar los tipos de casas y despegarlos en el selector de tipos
+    $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:5000/api/settings?tipo=tiposDeCasas",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        success: function (response) {
 
+            const tipos = response;
+            let content = "<option value=''>Seleccione el tipo de la casa..</option>";
 
+            for (const key in tipos) {
+                if (Object.hasOwnProperty.call(tipos, key)) {
+                    const tipoCasa = tipos[key];
+                    content += "<option value='" + key + "'>" + tipoCasa + "</option>";
+                }
+            }
+            $("#tipoCasa").html(content);
+
+            if (editando == true && dataCasa) {
+                cargarTipoCasa();
+            }
+        },
+        error: function (response) {
+            console.log(response.responseJSON.message);
+        }
     });
 });

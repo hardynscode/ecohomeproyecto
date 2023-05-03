@@ -14,38 +14,6 @@
                 <form id="form-detailshome" class="row g-4">
                   <div class="col-12">
                     <label>Nombre de la casa<span class="text-danger" for="nombreCasa">*</span></label>
-<<<<<<< HEAD
-
-                    <div class="btn">
-
-                      <style>
-                        .btn {
-                          display: flex;
-                          justify-content: right;
-                          
-                        }
-                      </style>
-
-
-                      <a class="btn btn-primary" href="/templates/paginatomacorrientes.html"" role="button">
-                        <b>+</b>
-                        Agregar tomacorriente
-                      </a>
-
-                      <br>
-
-                      <a class="btn btn-warning" href="/templates/paginatomacorrientes.html"" role="button">
-                        <b>+</b>
-                        Agregar factura
-                      </a>
-                      
-                      
-
-                    </div>
-
-
-=======
->>>>>>> origin
                     <input type="text" id="nombreCasa" class="form-control"
                       placeholder="Ingrese el nombre con el que desea llamar su casa" required="required" readonly>
                   </div>
@@ -88,6 +56,11 @@
                 <a class="btn btn-primary mt-3" href="/detailshome/{{idCasa}}/tomacorrientes">
                   <i class="fa fa-plug"></i>  Administrar Tomacorrientes
                 </a>
+
+                <a class="btn btn-primary mt-3" href="/detailshome/{{idCasa}}/tomacorrientes">
+                  <i class="fa fa-file"></i>  Registrar Factura
+                </a>
+              
               
             </div>
           </div>
