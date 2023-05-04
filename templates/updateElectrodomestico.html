@@ -93,6 +93,13 @@
 
 <script type="text/javascript">
 
+	// Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "cliente") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
+
 	let dataElectrodomestico = null;
 
 	// obtenemos la informacion del usuario del local storage

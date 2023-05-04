@@ -82,6 +82,13 @@
 
 <script type="text/javascript">
 
+	// Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "cliente") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
+
 	const editando = false;
 	const dataToma = null;
 

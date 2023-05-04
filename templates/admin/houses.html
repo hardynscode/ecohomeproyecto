@@ -1,33 +1,51 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Casas</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 <div class="service-item position-relative">
     <h4 class="text-dark e font-weight-medium px-3">Todas las Casas</h4>
-    <div class="service py-2 px-2">
-        <h6 class="text-dark e font-weight-medium px-3">Estas son las casas registradas en el sistema:
-            <a href="#" class="btn btn-success" style="float: right;">Agregar una nueva casa</a>
-        </h6>
+    <div class="service pt-2 px-2">
+        <h6 class="text-dark e font-weight-medium px-3">Estas son las casas registradas en el sistema:</h6>
+
+        <div class="px-4 mx-4 alert alert-warning">
+            <p>
+                <i class="fa fa-info-circle"></i>
+                Para crear, modificar, y administrar la informacion de las casas (Tomacorrientes, Electrodomesticos,
+                Facturas, etc.) debes impersonar al usuario que tiene asociada dicha casa.
+            </p>
+        </div>
     </div>
 </div>
 
-    <div class="row col-lg-12 py-2 px-2 p-lg-5">
-        <table class='table table-responsive table-condensed table-bordered'>
-            <thead>
-                <tr>
-                    <th scope='col'>Tipo</th>
-                    <th scope='col'>Nombre</th>
-                    <th scope='col'>Direccion</th>
-                    <th scope='col'>Pais</th>
-                    <th scope='col'>Departamento</th>
-                    <th scope='col'>Ciudad</th>
-                    <th scope='col'>Usuario</th>
-                    <th scope='col' width="100px">Opciones</th>
-                </tr>
-            </thead>
-            <tbody id="houses-container">
-            </tbody>
-        </table>
-    </div>
+<div class="row col-lg-12 py-2 px-2 p-lg-5">
+    <table class='table table-responsive table-condensed table-bordered'>
+        <thead>
+            <tr>
+                <th scope='col'>Tipo</th>
+                <th scope='col'>Nombre</th>
+                <th scope='col'>Direccion</th>
+                <th scope='col'>Pais</th>
+                <th scope='col'>Departamento</th>
+                <th scope='col'>Ciudad</th>
+                <th scope='col'>Usuario</th>
+            </tr>
+        </thead>
+        <tbody id="houses-container">
+            <tr>
+                <td colspan="7">Cargando...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
 
@@ -35,6 +53,13 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        // Validacion de seguridad
+        const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+        if (loggedUser.rol != "admin") {
+            localStorage.setItem('user-ecohome', null);
+            window.location.href = "/";
+        }
 
         $.ajax({
             type: "GET",
@@ -52,17 +77,13 @@
                         const house = houses[index];
 
                         content += "<tr> " +
-                            "<td>"+ (house.tipoCasa || '') +"</td>" +
-                            "<td>"+ (house.nombreCasa || '') +"</td>" +
-                            "<td>"+ (house.direccion || '') +"</td>" +
-                            "<td>"+ (house.pais || '') +"</td>" +
-                            "<td>"+ (house.departamento || '') +"</td>" +
-                            "<td>"+ (house.ciudad || '') +"</td>" +
-                            "<td>"+ (house.identificacionCliente || '') +"</td>" +
-                            "<td>" +
-                                "<a class='btn btn-sm btn-success mr-2' href='#'><i class='fa fa-eye'></i></a>"+
-                                "<a class='btn btn-sm btn-danger' href='#'><i class='fa fa-trash'></i></a>"+
-                            "</td>" +
+                            "<td>" + (house.tipoCasa || '') + "</td>" +
+                            "<td>" + (house.nombreCasa || '') + "</td>" +
+                            "<td>" + (house.direccion || '') + "</td>" +
+                            "<td>" + (house.pais || '') + "</td>" +
+                            "<td>" + (house.departamento || '') + "</td>" +
+                            "<td>" + (house.ciudad || '') + "</td>" +
+                            "<td>" + (house.identificacionCliente || '') + "</td>" +
                             "</tr>";
 
                     }
@@ -81,4 +102,3 @@
 
 </script>
 {% endblock %}
-

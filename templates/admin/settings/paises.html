@@ -27,6 +27,7 @@
                 </tr>
             </thead>
             <tbody id="list-container">
+                <tr><td colspan="3">Cargando..</td></tr>
             </tbody>
         </table>
         <div class="col-lg-12">
@@ -42,6 +43,13 @@
 
 {% block scripts %}
 <script type="text/javascript">
+
+    // Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "admin") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
 
     $(document).ready(function () {
 
@@ -70,7 +78,7 @@
                         content += "<tr id='tipo-" + cantidadRegistros + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRegistros + "' required readonly disabled placeholder='Nombre' value='" + (pais.nombre || "") + "'/> </td> " +
                             "<td><span>" + cantDepartamentos + "</span></td>" +
                             "<td>" +
-                            "<a class='btn btn-sm btn-success' href='/admin/settings/paises/" + pais.nombre + "/departamentos' title='Ver Departamentos'><i class='fa fa-list'></i></a>";
+                            "<a class='btn btn-sm btn-success mr-2' href='/admin/settings/paises/" + pais.nombre + "/departamentos' title='Ver Departamentos'><i class='fa fa-list'></i></a>";
 
                         if (cantDepartamentos == 0) {
                             content += "<a class='btn btn-sm btn-danger eliminar' tipo-id='" + cantidadRegistros + "'><i class='fa fa-trash'></i></a>";

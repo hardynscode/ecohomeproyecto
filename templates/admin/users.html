@@ -1,33 +1,52 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
 <div class="service-item position-relative">
     <h4 class="text-dark e font-weight-medium px-3">Todas los Usuarios</h4>
     <div class="service py-2 px-2">
         <h6 class="text-dark e font-weight-medium px-3">Estos son los usuarios registrados en el sistema:
             <a href="#" class="btn btn-success" style="float: right;">Agregar una nuevo usuario</a>
         </h6>
+
+        <div class="px-4 mx-4 mt-5 alert alert-warning">
+            <p>
+                <i class="fa fa-info-circle"></i>
+                Impersona los usuarios para acceder a toda la informacion de cada uno de ellos:
+            </p>
+        </div>
     </div>
 </div>
 
-    <div class="row col-lg-12 py-2 px-2 p-lg-5">
-        <table class='table table-responsive table-condensed table-bordered'>
-            <thead>
-                <tr>
-                    <th scope='col'>Identificación</th>
-                    <th scope='col'>Nombres</th>
-                    <th scope='col'>Apellidos</th>
-                    <th scope='col'>Correo</th>
-                    <th scope='col'>Celular</th>
-                    <th scope='col'>Fecha Nacimiento</th>
-                    <th scope='col'>Rol</th>
-                    <th scope='col' width="100px">Opciones</th>
-                </tr>
-            </thead>
-            <tbody id="users-container">
-            </tbody>
-        </table>
-    </div>
+<div class="row col-lg-12 py-2 px-2 p-lg-5">
+    <table class='table table-responsive table-condensed table-bordered'>
+        <thead>
+            <tr>
+                <th scope='col'>Identificación</th>
+                <th scope='col'>Nombres</th>
+                <th scope='col'>Apellidos</th>
+                <th scope='col'>Correo</th>
+                <th scope='col'>Celular</th>
+                <th scope='col'>Fecha Nacimiento</th>
+                <th scope='col'>Rol</th>
+                <th scope='col' width="140px">Opciones</th>
+            </tr>
+        </thead>
+        <tbody id="users-container">
+            <tr><td colspan="8">Cargando..</td></tr>
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
 
@@ -35,6 +54,15 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+        // Validacion de seguridad
+        const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+        if (loggedUser.rol != "admin") {
+            localStorage.setItem('user-ecohome', null);
+            window.location.href = "/";
+        }
+
+        let users = [];
 
         $.ajax({
             type: "GET",
@@ -44,7 +72,7 @@
             async: true,
             success: function (response) {
 
-                const users = response;
+                users = response;
                 let content = "";
 
                 if (users) {
@@ -52,16 +80,17 @@
                         const user = users[index];
 
                         content += "<tr> " +
-                            "<td>"+ (user.identificacion || '') +"</td>" +
-                            "<td>"+ (user.nombre1 || '') + (user.nombre2 || '') + "</td>" +
-                            "<td>"+ (user.apellido1 || '') + (user.apellido2 || '') + "</td>" +
-                            "<td>"+ (user.correo || '') +"</td>" +
-                            "<td>"+ (user.celular || '') +"</td>" +
-                            "<td>"+ (user.fechaNacimiento || '') +"</td>" +
-                            "<td>"+ (user.rol || 'cliente') +"</td>" +
+                            "<td>" + (user.identificacion || '') + "</td>" +
+                            "<td>" + (user.nombre1 || '') + (user.nombre2 || '') + "</td>" +
+                            "<td>" + (user.apellido1 || '') + (user.apellido2 || '') + "</td>" +
+                            "<td>" + (user.correo || '') + "</td>" +
+                            "<td>" + (user.celular || '') + "</td>" +
+                            "<td>" + (user.fechaNacimiento || '') + "</td>" +
+                            "<td>" + (user.rol || 'cliente') + "</td>" +
                             "<td>" +
-                                "<a class='btn btn-sm btn-success mr-2' href='#'><i class='fa fa-eye'></i></a>"+
-                                "<a class='btn btn-sm btn-danger' href='#'><i class='fa fa-trash'></i></a>"+
+                            "<a class='btn btn-sm btn-primary mr-2 impersonar-usuario' id-usuario='" + user.identificacion + "' href='javascript:void(0);' title='Impersonar'><i class='fa fa-user'></i></a>" +
+                            "<a class='btn btn-sm btn-success mr-2' href='#' title='Editar'><i class='fa fa-edit'></i></a>" +
+                            "<a class='btn btn-sm btn-danger' href='#' title='Eliminar'><i class='fa fa-trash'></i></a>" +
                             "</td>" +
                             "</tr>";
 
@@ -76,6 +105,25 @@
             error: function (response) {
                 console.log(response.responseJSON.message);
             }
+        });
+
+
+        $("#users-container").on("click", ".impersonar-usuario", function () {
+            const usuarioId = $(this).attr("id-usuario");
+            const usuarioImpersonar = users.find(({ identificacion }) => identificacion == usuarioId);
+
+            const usuarioAdmin = JSON.parse(localStorage.getItem('user-ecohome'));
+
+            if (usuarioAdmin && usuarioImpersonar) {
+                console.log("vamos a impersonar al usuario", usuarioImpersonar);
+
+                localStorage.setItem('impersonate-user', true);
+                localStorage.setItem('original-admin-user', JSON.stringify(usuarioAdmin));
+                localStorage.setItem('user-ecohome', JSON.stringify(usuarioImpersonar));
+                window.location.href = "/home";
+            }
+
+
         });
     });
 

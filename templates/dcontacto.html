@@ -141,7 +141,12 @@
                 data: data,
                 success: function (response) {
                     console.log(response);
-                    window.location.href = "home";
+                    
+                    if (usuario.rol == "admin") {
+                        window.location.href = "/admin/home";
+                    } else {
+                        window.location.href = "/home";
+                    }
                 },
                 error: function (response) {
                     alert(response.responseJSON.message);

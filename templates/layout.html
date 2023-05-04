@@ -63,8 +63,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dcontacto') }}"><i class="fa fa-user"></i> Mi Perfil </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-danger" href="javascript: void(0);" id="btn-salir">
+                    <li class="nav-item btn btn-warning menu-impersonado mr-2 py-0 d-none">
+                        <a class="nav-link " href="javascript: void(0);" id="btn-volver-usuario-admin">
+                            <i class="fa fa-user-secret"></i> Volver a Admin</a>
+                    </li>
+                    <li class="nav-item btn btn-danger py-0">
+                        <a class="nav-link " href="javascript: void(0);" id="btn-salir">
                             <i class="fa fa-sign-out"></i> Salir</a>
                     </li>
                 </ul>
@@ -97,10 +101,17 @@
             }
         }
 
+        const impersonado = JSON.parse(localStorage.getItem('impersonate-user'));
+        if (impersonado == true) {
+            $(".menu-impersonado").removeClass("d-none");
+        }
+
         $(document).ready(function () {
 
             $("#btn-salir").click(function () {
                 localStorage.setItem('user-ecohome', null);
+                localStorage.setItem('impersonate-user', false);
+                localStorage.setItem('original-admin-user', null);
                 window.location.href = "/";
             });
 
@@ -110,6 +121,17 @@
                 } else {
                     window.location.href = "/home";
                 }
+            });
+
+            $("#btn-volver-usuario-admin").click(function () {
+                if (impersonado == true) {
+                    const adminUser = localStorage.getItem('original-admin-user');
+                    localStorage.setItem('user-ecohome', adminUser);
+                    localStorage.setItem('impersonate-user', false);
+                    localStorage.setItem('original-admin-user', null);
+                    window.location.href = "/admin/users";    
+                }
+                
             });
         });
     </script>

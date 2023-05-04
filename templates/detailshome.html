@@ -81,6 +81,14 @@
 <script type="text/javascript" src="{{url_for('static', filename='js/homeSettings.js')}}"></script>
 
 <script type="text/javascript">
+
+  // Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "cliente") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
+  
   const editando = true;
   let dataCasa = null;
 
