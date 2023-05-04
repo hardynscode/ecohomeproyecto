@@ -11,69 +11,154 @@
                 <h3 class="mb-3">Datos de Contacto</h3>
                 <div class="bg-white shadow rounded">
                     <div class="row">
-                        <div class="col-md-7 pe-0">
+                        <div class="col-md-6 pe-0">
                             <div class="form-left h-100 py-5 px-5">
-                                <form action="" class="row g-4">
-                                    <p>Por favor complete toda la informacion de su perfil:</p>
-
-                                    <div class="form-outline mb-2">
+                                <form id="form-dataContact" class="row g-3">
+                                    <p>Por favor complete toda la información de su perfil:</p>
+                                    <div class="form-outline mb-1">
                                         <label>Primer Nombre <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Primer Nombre"
+                                        <input type="text" id="nombre1" class="form-control" placeholder="Primer Nombre"
                                             required="required">
                                     </div>
-
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-1">
                                         <label>Segundo Nombre<span></span></label>
-                                        <input type="text" class="form-control" placeholder="Segundo Nombre"
-                                            required="required">
+                                        <input type="text" id="nombre2" class="form-control"
+                                            placeholder="Segundo Nombre">
                                     </div>
-                                
-
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-1">
                                         <label>Primer Apellido <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" placeholder="Primer Apellido"
-                                            required="required">
+                                        <input type="text" id="apellido1" class="form-control"
+                                            placeholder="Primer Apellido" required="required">
                                     </div>
-
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-1">
                                         <label>Segundo Apellido<span></span></label>
-                                        <input type="text" class="form-control" placeholder="Segundo Apellido"
-                                            required="required">
+                                        <input type="text" id="apellido2" class="form-control"
+                                            placeholder="Segundo Apellido">
                                     </div>
-
-                                    <div class="form-outline mb-2">
+                                    <div class="form-outline mb-1">
                                         <label>Fecha de nacimiento<span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" placeholder="Segundo Nombre"
-                                            required="required">
+                                        <input type="date" id="fechaNacimiento" class="form-control"
+                                            placeholder="Segundo Nombre" required="required">
                                     </div>
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label">Celular <span class="text-danger"
+                                                for="celular">*</label>
+                                        <input type="number" id="celular" class="form-control bg-transparent p-6"
+                                            placeholder="Celular" required>
+                                    </div>
+                                    <div class="form-outline mb-1">
+                                        <label class="form-label">Correo <span class="text-danger"
+                                                for="correo">*</label>
+                                        <input type="email" id="correo" class="form-control bg-transparent p-6"
+                                            placeholder="Correo" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" id="btn-dataContact"
+                                            class="btn btn-success px-4 float-end" value="actualizar">Guardar</button>
 
-                                    <div class="form-outline mb-4">
-                                        <label  class="form-label" >Correo <span class="text-danger" for="campo-correo">*</label>
-                                        <input type="email" id="campo-correo" class="form-control bg-transparent p-6" placeholder="Correo" required>
-                                    </div>
                                 </form>
-                                <div class="form-outline mb-2">
-                                    <button type="submit" class="btn btn-primary px-4 float-end">Guardar</button> 
-                                </div>
                             </div>
-                            <div class="form-left h-100 py-5 px-5">
-                                <div class="form-outline mb-2">
-                                    <label>Fecha de nacimiento<span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" placeholder="Segundo Nombre"
-                                        required="required">
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <label  class="form-label" >Correo <span class="text-danger" for="campo-correo">*</label>
-                                    <input type="email" id="campo-correo" class="form-control bg-transparent p-6" placeholder="Correo" required>
-                                </div>
-                            </div>>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+<script type="text/javascript">
+    const editando = false;
+
+    $(document).ready(function () {
+
+        const identificacion = usuario.identificacion;
+
+        $.ajax({
+            type: "GET",
+            url: "http://127.0.0.1:5000/api/users/" + identificacion,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            async: true,
+            success: function (response) {
+                $("#nombre1").val(response.nombre1);
+                $('#nombre2').val(response.nombre2);
+                $("#apellido1").val(response.apellido1);
+                $("#apellido2").val(response.apellido2);
+                $("#fechaNacimiento").val(response.fechaNacimiento);
+                $("#celular").val(response.celular);
+                $("#correo").val(response.correo);
+            },
+            error: function (response) {
+                alert(response.responseJSON.message);
+            }
+        });
+
+        // Codigo para recolectar la data y enviarla al api para actualizar la casa
+        $("#form-dataContact").submit(function (evento) {
+            evento.preventDefault();
+
+            // Deshabilitamos el botón de actualizar y cambiamos su texto
+            $("#btn-dataContact").attr("disabled", true);
+            $("#btn-dataContact").html("Espere..");
+
+
+            // Obtenemos los valores de los campos de entrada
+            const nombre1 = $("#nombre1").val();
+            const nombre2 = $('#nombre2').val();
+            const apellido1 = $("#apellido1").val();
+            const apellido2 = $("#apellido2").val();
+            const fechaNacimiento = $("#fechaNacimiento").val();
+            const celular = $("#celular").val();
+            const correo = $("#correo").val();
+
+            // obtenemos la informacion del usuario del local storage
+            const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+            const identificacion = usuario.identificacion;
+
+            const data = JSON.stringify({
+                nombre1: nombre1,
+                nombre2: nombre2,
+                apellido1: apellido1,
+                apellido2: apellido2,
+                fechaNacimiento: fechaNacimiento,
+                celular: celular,
+                correo: correo
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: "http://127.0.0.1:5000/api/users/" + identificacion,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                async: true,
+                data: data,
+                success: function (response) {
+                    console.log(response);
+                    window.location.href = "home";
+                },
+                error: function (response) {
+                    alert(response.responseJSON.message);
+
+                    $("#btn-dataContact").attr("disabled", false);
+                    $("#btn-dataContact").html("Actualizar");
+                }
+            });
+        });
+
+    });
+</script>
+
+
+
+
+
+
 
 {% endblock %}

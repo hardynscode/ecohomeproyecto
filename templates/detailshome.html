@@ -119,12 +119,12 @@
         $("#direccion").val(data.direccion);
 
         $("#cant-tomas").html("(" + dataCasa.tomacorrientes.length + ")");
-        $("#cant-electrodomesticos").html("(" + dataCasa.electrodomesticos.length + ")");
+        // $("#cant-electrodomesticos").html("(" + dataCasa.electrodomesticos.length + ")");
         // $("#cant-facturas").html("(" + dataCasa.facturas.length + ")");
       }
     });
 
-    // Codigo para recolectar la dara y enviarla al api para actualizar la casa
+    // Codigo para recolectar la data y enviarla al api para actualizar la casa
     $("#form-detailshome").submit(function (evento) {
       evento.preventDefault();
 

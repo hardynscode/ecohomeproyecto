@@ -82,6 +82,10 @@ def listadoSettingsZonasCasas():
 def listadoSettingsTiposEficiencia():
     return render_template('./admin/settings/tiposEficiencia.html')
 
+@app.route('/admin/settings/tiposElectrodimesticos')
+def listadoSettingsTiposElectrodimesticos():
+    return render_template('./admin/settings/tiposElectrodomesticos.html')
+
 @app.route('/admin/settings/paises')
 def listadoSettingsPaises():
     return render_template('./admin/settings/paises.html')

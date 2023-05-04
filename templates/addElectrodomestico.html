@@ -29,13 +29,9 @@
 								<form class="row g-4" id="form-creacion-electrodomestico">
 									<div class="col-12">
 										<label>Tipo de Electrodomestico<span class="text-danger"
-												for="tipoElectrodomestico">
-												*</span></label>
+												for="tipoElectrodomestico">*</span></label>
 										<select class="form-control" id="tipoElectrodomestico"
 											name="tipoElectrodomestico" required>
-											<option value="">Seleccione..</option>
-											<option value="tv">TV</option>
-											<option value="router">Router</option>
 										</select>
 									</div>
 
@@ -58,6 +54,10 @@
 										<select class="form-control" id="tomacorrienteActual" name="tomacorrienteActual"
 											required>
 										</select>
+										<p class="text text-danger d-none" id="sin-tomas">No hay tomacorrientes
+											registrados en esta casa
+											<a href="/detailshome/{{idCasa}}/tomacorrientes/new">Agregar</a>
+										</p>
 									</div>
 
 									<div class="col-12">
@@ -103,6 +103,36 @@
 
 	$(document).ready(function () {
 
+		//Cargar los tipos de electrodomesticos
+		$.ajax({
+			type: "GET",
+			url: "http://127.0.0.1:5000/api/settings?tipo=tiposElectrodomesticos",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			async: true,
+			success: function (response) {
+
+				const registros = response;
+				let content = "<option value=''>Seleccione..</option>";
+
+				for (const key in registros) {
+					if (Object.hasOwnProperty.call(registros, key)) {
+						const elemento = registros[key];
+						content += "<option value='" + key + "'>" + elemento + "</option>";
+					}
+				}
+				$("#tipoElectrodomestico").html(content);
+
+				if (editando == true && dataToma) {
+					cargarTipoElectrodomesticos();
+				}
+			},
+			error: function (response) {
+				console.log(response.responseJSON.message);
+			}
+
+		});
+
 		// Cargar los tipos de eficiencia en el selector
 		$.ajax({
 			type: "GET",
@@ -128,7 +158,7 @@
 			}
 		});
 
-		
+
 		// cargamos los tomacorrientes 
 		$.ajax({
 			type: "GET",
@@ -140,15 +170,20 @@
 				const tomacorrientes = response;
 
 				let content = "<option value=''>Seleccione..</option>";
-
+				let cantidadTomacorrientes = 0;
 				for (const key in tomacorrientes) {
 					if (Object.hasOwnProperty.call(tomacorrientes, key)) {
 						const tomaActual = tomacorrientes[key];
+						cantidadTomacorrientes += 1;
 						const descripcionTomaActual = "<b>Zona:</b> " + tomaActual.zona + " - <b>Tipo:</b> " + tomaActual.tipo + " <br> <b>Descripcion: </b>" + tomaActual.descripcion;
 						content += "<option value='" + key + "'>" + descripcionTomaActual + "</option>";
 					}
 				}
 				$("#tomacorrienteActual").html(content);
+
+				if (cantidadTomacorrientes == 0) {
+					$("#sin-tomas").removeClass("d-none");
+				}
 			},
 			error: function (response) {
 				console.log(response.responseJSON.message);
@@ -156,7 +191,7 @@
 		});
 
 
-		// Cargar los tipos de electrodomesticos y despegarlos en el selector
+		// Cargar los tipos de tomacorrientes y despegarlos en el selector
 		$.ajax({
 			type: "GET",
 			url: "http://127.0.0.1:5000/api/settings?tipo=tiposElectrodomestico",
@@ -174,7 +209,9 @@
 						content += "<option value='" + key + "'>" + elemento.nombre + " (" + elemento.descripcion + ")</option>";
 					}
 				}
-				$("#tipoTomacorriente").html(content);
+
+				$("#tomacorrienteActual").html(content);
+
 
 				if (editando == true && dataToma) {
 					cargarTipoTomacorriente();
@@ -184,7 +221,7 @@
 				console.log(response.responseJSON.message);
 			}
 		});
-		
+
 
 		// Evento para enviar la data a crear el tomacorriente
 		$("#form-creacion-electrodomestico").submit(function (evento) {
