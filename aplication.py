@@ -45,6 +45,10 @@ def electrodomesticosHome(idCasa):
 def addElectrodomesticoHome(idCasa):
     return render_template('addElectrodomestico.html', idCasa=idCasa)
 
+@app.route('/detailshome/<idCasa>/electrodomesticos/<idElectrodomestico>/edit')
+def updateElectrodomesticoHome(idCasa, idElectrodomestico):
+    return render_template('updateElectrodomestico.html', idCasa=idCasa, idElectrodomestico=idElectrodomestico)
+
 @app.route('/dcontacto')
 def dcontacto():
     return render_template('dcontacto.html')
