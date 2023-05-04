@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item position-relative">
+	<nav aria-label="breadcrumb px-5">
+		<ol class="breadcrumb px-3">
+			<li class="breadcrumb-item btn-ir-home"><a href="/home">Home</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome?idCasa={{idCasa}}">{{idCasa}}</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome/{{idCasa}}/facturas">Facturas</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Agregar Factura</li>
+		</ol>
+	</nav>
+
+	<h4 class="text-dark e font-weight-medium px-3">Agregar nueva factura:</h4>
+	<div class="service py-4 px-2">
+		<h6 class="text-dark e font-weight-medium px-3">Estos diligencie toda la información requerida:</h6>
+	</div>
+</div>
+
+<section class="vh-50 ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 offset-lg-1">
+
+				<div class="bg-white shadow rounded">
+					<div class="row">
+						<div class="col-md-8 pe-0">
+							<div class="form-left h-100 py-5 px-5">
+								<form class="row g-4" id="form-creacion-factura">
+									<div class="col-12">
+										<label>Mes Facturado<span class="text-danger"
+												for="mesFacturado">*</span></label>
+											<input type="text" class="form-control" id="mesFacturado" required>										
+										</select>
+									</div>
+
+									<a>Periodo Facturado <span class="text-danger"></span></a>
+									<div class="form-group">
+									  <label for="fechaInicio">Fecha de inicio: <span class="text-danger"
+										for="mesFacturado">*</span></label>
+									  <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+									</div>
+									<div class="form-group">
+									  <label for="fechaFin" >Fecha de fin: <span class="text-danger"
+										for="mesFacturado">*</span></label>
+									  <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+									</div>							  
+									
+									<div class="col-12">
+										<label>Valor Total Facturado<span class="text-danger"
+												for="precioActual">*</span></label>
+										<input type="number" class="form-control" id="precioActual" required>
+									</div>
+
+									<div class="col-12">
+										<label>Comsumo del mes <span class="text-danger"
+												for="consumoMes">*</span></label>
+										<input type="number" class="form-control" id="consumoMes" required>
+									</div>
+								
+									<div class="col-12">
+										<button type="submit" class="btn btn-success" id="btn-agregar"
+											style="float: right;">Agregar Factura</button>
+									</div>
+
+								</form>
+							</div>
+						</div>
+						<div class="col-md-4 ps-0 d-none d-md-block">
+							<div class="form-right h-100 bg-transparent text-black text-center pt-5">
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="text-end text-secondary mt-3"></p>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+	// Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "cliente") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
+
+	const editando = false;
+	const dataFactura = null;
+
+	// obtenemos la informacion del usuario del local storage
+	const usuarioLogueado = JSON.parse(localStorage.getItem('user-ecohome'));
+	const identificacion = usuarioLogueado.identificacion;
+
+	$(document).ready(function () {
+		
+		// Evento para enviar la data a crear la factura
+		$("#form-creacion-factura").submit(function (evento) {
+			evento.preventDefault();
+
+			// Deshabilitamos el botón de guardar y cambiamos su texto
+			const btnCrear = $("#btn-agregar");
+			btnCrear.attr("disabled", true);
+			btnCrear.html("Espere..");
+
+			// Obtenemos los valores de los campos de entrada
+			const mesFacturado = $("#mesFacturado").val();
+			const fechaInicio = $('#fechaInicio').val();
+			const fechaFin = $("#fechaFin").val();
+			const precioActual = $("#precioActual").val();
+			const consumoMes = $("#consumoMes").val();
+
+			const data = JSON.stringify({
+				mesFacturado,
+				fechaInicio,
+				fechaFin,
+				precioActual,
+				consumoMes
+			});
+
+			$.ajax({
+				type: "POST",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/facturas",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				data: data,
+				success: function (response) {
+					console.log(response);
+					window.location.href = "/detailshome/{{idCasa}}/facturas";
+				},
+				error: function (response) {
+					alert(response.responseJSON.message);
+
+					btnCrear.attr("disabled", false);
+					btnCrear.html("Agregar Factura");
+				}
+			});
+
+		});
+	});
+
+</script>
+{% endblock %}
+
+
+
+
+s
+
+
+
+</body>
+
+</html>

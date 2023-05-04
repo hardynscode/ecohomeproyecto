@@ -24,6 +24,11 @@ def home():
 def addhome():
     return render_template('addhome.html')
 
+@app.route('/addfactura')
+def addfactura():
+    return render_template('addfactura.html')
+
+
 @app.route('/detailshome')
 def detailshome():
     idCasa = request.args.get('idCasa')
@@ -49,9 +54,18 @@ def addElectrodomesticoHome(idCasa):
 def updateElectrodomesticoHome(idCasa, idElectrodomestico):
     return render_template('updateElectrodomestico.html', idCasa=idCasa, idElectrodomestico=idElectrodomestico)
 
+@app.route('/detailshome/<idCasa>/addFactura/new')
+def addFactura(idCasa):
+    return render_template('addFactura.html', idCasa=idCasa)
+
+@app.route('/detailshome/<idCasa>/facturas')
+def facturaHome(idCasa):
+    return render_template('listFacturas.html', idCasa=idCasa)
+
 @app.route('/dcontacto')
 def dcontacto():
     return render_template('dcontacto.html')
+
 
 #Rutas para usuarios tipo admin
 @app.route('/admin/home')
