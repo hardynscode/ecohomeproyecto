@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <section class="vh-100" style="background: linear-gradient(to right,#67b990,#70c95a )">
+  <section  style="background: linear-gradient(to right,#67b990,#70c95a )">
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col col-xl-7">
@@ -25,11 +25,31 @@
                   <form id="formulario-registro">
                     <h1>Registro</h1>
                   
-                    <p>Por favor diligencie los siguientes datos para registrarse en nuestro sistema</p>
+                    <p>Por favor diligencie los siguientes datos para registrarse en nuestro sistema</p>                   
                   
                     <div class="form-outline mb-4">
-                      <label  class="form-label" >Cedula <span class="text-danger" for="campo-correo">*</label>   
+                      <label  class="form-label" >Cedula <span class="text-danger" for="campo-cedula">*</label>   
                       <input type="text" id="campo-identificacion" class="form-control bg-transparent p-6" placeholder="Cedula" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Primer Nombre <span class="text-danger" for="nombre1">*</label>   
+                      <input type="text" id="nombre1" class="form-control bg-transparent p-6" placeholder="Primer nombre" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Primer Apellido <span class="text-danger" for="apellido1">*</label>   
+                      <input type="text" id="apellido1" class="form-control bg-transparent p-6" placeholder="Primer apellido" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Fecha de Nacimiento <span class="text-danger" for="fechaNacimiento">*</label>   
+                      <input type="date" id="fechaNacimiento" class="form-control bg-transparent p-6" placeholder="Fecha de nacimiento" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Celular<span class="text-danger" for="celular">*</label>   
+                      <input type="number" id="celular" class="form-control bg-transparent p-6" placeholder="Celular de contacto" required>
                     </div>
                   
                     <div class="form-outline mb-4">
@@ -68,6 +88,10 @@
     $(document).ready(() => {
       const formularioRegistro = $("#formulario-registro");
       const identificacion = $("#campo-identificacion");
+      const nombre1 = $("#nombre1");
+      const apellido1 = $("#apellido1");
+      const fechaNacimiento = $("#fechaNacimiento");
+      const celular = $("#celular");
       const correo = $("#campo-correo");
       const password = $("#campo-password");
       const verificarPassword = $("#campo-verificar-password");
@@ -76,18 +100,22 @@
       formularioRegistro.submit((evento) => {
         evento.preventDefault();
 
-        if (!identificacion.val() || !correo.val() || !password.val() || !verificarPassword.val()) {
-          alert("Por favor complete todos los campos.");
+        if (!identificacion.val() || !nombre1.val() || !apellido1.val() || !fechaNacimiento.val()  || !celular.val()   || !correo.val() || !password.val() || !verificarPassword.val()) {
+          bootbox.alert("Por favor complete todos los campos.");
           return;
         }
 
         if (password.val() !== verificarPassword.val()) {
-          alert("Las contraseñas no coinciden.");
+          bootbox.alert("Las contraseñas no coinciden.");
           return;
         }
 
         const data = JSON.stringify({
           identificacion: identificacion.val(),
+          nombre1: nombre1.val(),
+          apellido1: apellido1.val(),
+          fechaNacimiento: fechaNacimiento.val(),
+          celular: celular.val(),
           correo: correo.val(),
           password: password.val(),
         });
@@ -104,11 +132,11 @@
           data: data,
           success: (response) => {
             console.log(response);
-            alert("Registro exitoso.");
+            bootbox.alert("Registro exitoso.");
             window.location.href = "/";
           },
           error: (response) => {
-            alert(response.responseJSON.message);
+            bootbox.alert(response.responseJSON.message);
             btnRegistro.attr("disabled", false);
             btnRegistro.html("Guardar");
           },

@@ -265,7 +265,7 @@
 					window.location.href = "/detailshome/{{idCasa}}/electrodomesticos";
 				},
 				error: function (response) {
-					alert(response.responseJSON.message);
+					bootbox.alert(response.responseJSON.message);
 
 					btnCrear.attr("disabled", false);
 					btnCrear.html("Crear Electrodomestico");

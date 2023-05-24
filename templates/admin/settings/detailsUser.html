@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <title>EcoHOme</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!--  Bootstrap Stylesheet -->
+  <link href="../static/css/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <section style="background: linear-gradient(to right,#67b990,#70c95a )">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col col-xl-7">
+          <div class="card" style="border-radius: 1rem;">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-12 d-flex align-items-center">
+                <div class="card-body p-4 p-lg-6 text-black">
+                  <form id="formulario-dataUsuario">
+                    <h1>Datos de usuario</h1>
+                  
+                    <p>Por favor diligencie </p>
+                    
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="rol">Rol <span class="text-danger">*</span></label>
+                      <select id="rol" class="form-select" required>
+                          <option value="" selected disabled>Seleccione un rol</option>
+                          <option value="admin">Administrador</option>
+                          <option value="cliente">Cliente</option>
+                      </select>
+                      </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Cedula <span class="text-danger" for="campo-correo">*</label>   
+                      <input type="text" id="campo-identificacion" class="form-control bg-transparent p-6" placeholder="Cedula" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Primer Nombre <span class="text-danger" for="nombre1">*</label>   
+                      <input type="text" id="nombre1" class="form-control bg-transparent p-6" placeholder="Primer nombre" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Primer Apellido <span class="text-danger" for="apellido1">*</label>   
+                      <input type="text" id="apellido1" class="form-control bg-transparent p-6" placeholder="Primer apellido" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Fecha de Nacimiento <span class="text-danger" for="fechaNacimiento">*</label>   
+                      <input type="date" id="fechaNacimiento" class="form-control bg-transparent p-6" placeholder="Fecha de nacimiento" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Celular<span class="text-danger" for="celular">*</label>   
+                      <input type="number" id="celular" class="form-control bg-transparent p-6" placeholder="Celular de contacto" required>
+                    </div>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Correo <span class="text-danger" for="campo-correo">*</label>
+                      <input type="email" id="campo-correo" class="form-control bg-transparent p-6" placeholder="Correo" required>
+                    </div>                   
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Contraseña <span class="text-danger" for="campo-password">*</label>               
+                      <input type="password" id="campo-password" class="form-control bg-transparent p-6" placeholder="Contraseña" required>
+                    </div>
+                  
+                    <div class="form-outline mb-4">
+                      <label  class="form-label" >Verificar contraseña <span class="text-danger" for="campo-verificar-password">*</label>   
+                      <input type="password" id="campo-verificar-password" class="form-control bg-transparent p-6" placeholder="Verificar contraseña" required>
+                    </div>
+                  
+                    <button class="btn btn-primary btn-primary" type="submit" id="btn-actualizar">Actualizar</button>
+                  </form>                    
+                </div>                           
+              </div>              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% block scripts %}
+  
+<script type="text/javascript">
+  const editando = false;
+
+  $(document).ready(function () {
+    const editando = true;
+    let dataUsuario = null;
+
+
+      const identificacion = usuario.identificacion;
+      const correo ="{{correo}}";
+      $.get("http://127.0.0.1:5000/api/users/" + identificacion , function (data) {
+
+      if (data) {
+        dataUsuario = data;
+        $("#identificacion").val(data.identificacion);
+        $("#correo").val(data.correo);        
+      }
+      }); 
+     
+
+      // Codigo para recolectar la data y enviarla al api para actualizar la casa
+      $("#formulario-dataUsuario").submit(function (evento) {
+          evento.preventDefault();
+
+          // Deshabilitamos el botón de actualizar y cambiamos su texto
+          $("#btn-actualizar").attr("disabled", true);
+          $("#btn-actualizar").html("Espere..");
+
+
+          // Obtenemos los valores de los campos de entrada      
+          const rol = $("#rol").val();          
+          const nombre1 = $("#nombre1").val();
+          const apellido1 = $("#apellido1").val();
+          const fechaNacimiento = $("#fechaNacimiento").val();
+          const celular = $("#celular").val();
+          const correo = $("#campo-correo").val();      
+          const password = $("#campo-password").val();
+          const verificarPassword = $("#campo-verificar-password").val();
+
+          // obtenemos la informacion del usuario del local storage
+          const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
+          const identificacion = usuario.identificacion;
+
+          const data = JSON.stringify({
+            rol: rol.val(),
+            identificacion: identificacion.val(),
+            nombre1: nombre1.val(),
+            apellido1: apellido1.val(),
+            fechaNacimiento: fechaNacimiento.val(),
+            celular: celular.val(),
+            correo: correo.val(),
+            password: password.val(),
+          });
+
+          $.ajax({
+              type: "PUT",
+              url: "http://127.0.0.1:5000/api/users/" + identificacion,
+              dataType: "json",
+              contentType: "application/json; charset=utf-8",
+              async: true,
+              data: data,
+              success: function (response) {
+                  console.log(response);
+                  
+                  if (usuario.rol == "admin") {
+                      window.location.href = "/admin/home";
+                  } else {
+                      window.location.href = "/admin/users";
+                  }
+              },
+              error: function (response) {
+                bootbox.alert(response.responseJSON.message);
+
+                  $("#btn-actualizar").attr("disabled", false);
+                  $("#btn-actualizar").html("Actualizar");
+              }
+          });
+      });
+
+  });
+</script>
+
+
+    
+  
+  
+  
+  {% endblock %} 

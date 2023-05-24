@@ -16,7 +16,7 @@
     <h4 class="text-dark e font-weight-medium px-3">Todas los Usuarios</h4>
     <div class="service py-2 px-2">
         <h6 class="text-dark e font-weight-medium px-3">Estos son los usuarios registrados en el sistema:
-            <a href="#" class="btn btn-success" style="float: right;">Agregar una nuevo usuario</a>
+            <a href="/admin/newUser" class="btn btn-success" style="float: right;">Agregar una nuevo usuario</a>
         </h6>
 
         <div class="px-4 mx-4 mt-5 alert alert-warning">
@@ -69,6 +69,7 @@
         $.ajax({
             type: "GET",
             url: "http://127.0.0.1:5000/api/users",
+
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             async: true,
@@ -94,10 +95,8 @@
                         if (user.rol != "admin") {
                             content += "<a class='btn btn-sm btn-primary mr-2 impersonar-usuario' id-usuario='" + user.identificacion + "' href='javascript:void(0);' title='Impersonar'><i class='fa fa-user'></i></a>";
                         }
-
-                        content += "<a class='btn btn-sm btn-success mr-2' href='#' title='Editar'><i class='fa fa-edit'></i></a>" +
-                            "<a class='btn btn-sm btn-danger' href='#' title='Eliminar'><i class='fa fa-trash'></i></a>" +
-                            "</td>" +
+                        content += "<a class='btn btn-sm btn-success mr-2' data-id='" + user.identificacion + "' href='/admin/editUser/" + user.identificacion + " ' title='Editar'><i class='fa fa-edit'></i></a>" +
+                            "<a class='btn btn-sm btn-danger'  registro-id='" + user.identificacion + "'href='#' title='Eliminar'><i class='fa fa-trash'></i></a>" +
                             "</tr>";
 
                     }
@@ -126,13 +125,59 @@
                 localStorage.setItem('user-ecohome', JSON.stringify(usuarioImpersonar));
                 window.location.href = "/home";
             }
-
-
         });
-    
 
-        
+        $("#users-container").on("click", "[registro-id]", function () {
+            const idRegistro = $(this).attr("registro-id");
+
+            bootbox.confirm({
+                message: 'Desea eliminar este usuario?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (eliminar) {
+                    if (eliminar) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://127.0.0.1:5000/api/users/" + idRegistro,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (response) {
+                                $("#fila-" + idRegistro).remove();
+                                const numRegistros = $("#users-container tr").length - 1;
+                                $("#num-registros").text(`Total de registros: ${numRegistros}`);
+                                bootbox.alert("El usuario ha sido eliminado correctamente");
+                                window.location.href = "/admin/users";
+                            },
+                            error: function (response) {
+                                bootbox.alert(response.responseJSON.message);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+
+
+
+
     });
+
+
+
+
+
+
+
 
 </script>
 {% endblock %}

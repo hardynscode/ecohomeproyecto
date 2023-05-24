@@ -84,6 +84,18 @@ def listadoCasas():
 def listadoSettings():
     return render_template('./admin/settings/home.html')
 
+@app.route('/admin/newUser')
+def myNewUser():
+    return render_template('./admin/newUser.html')
+
+@app.route('/admin/editUser/<identificacion>')
+def myEditUser(identificacion):
+    return render_template('./admin/editUser.html', identificacion=identificacion)
+
+@app.route('/admin/settings/tiposRol')
+def listadoSettingsTipoRol():
+    return render_template('./admin/settings/tipoRol.html')
+
 @app.route('/admin/settings/tiposTomacorriente')
 def listadoSettingsTiposTomacorriente():
     return render_template('./admin/settings/tiposTomacorriente.html')

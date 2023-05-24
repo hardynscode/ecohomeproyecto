@@ -103,13 +103,29 @@
 
         // Evento para eliminar la fila seleccionada con los campos de un registro
         $('#list-container').on('click', 'a.eliminar', function () {
-            const eliminar = confirm("Desea eliminar este elemento?");
 
-            if (eliminar) {
-                const idEliminar = "tipo-" + $(this).attr("tipo-id");
-                $("#" + idEliminar).remove();
-                cantidadRegistros -= 1;
-            }
+            const tipoId = $(this).attr("tipo-id");
+            
+            bootbox.confirm({
+                message: 'Desea eliminar este elemento?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (eliminar) {
+                    if (eliminar) {
+                        const idEliminar = "tipo-" + tipoId;
+                        $("#" + idEliminar).remove();
+                        cantidadRegistros -= 1;
+                    }
+                }
+            });
         });
 
         // Evento para guardar los cambios en los registros
@@ -147,12 +163,12 @@
                 async: true,
                 success: function (response) {
                     if (response.message) {
-                        alert(response.message);
+                        bootbox.alert(response.message);
                         window.location.href = "/admin/settings/paises/{{pais}}/departamentos";
                     }
                 },
                 error: function (response) {
-                    alert("Error: " + response.responseJSON.message);
+                    bootbox.alert("Error: " + response.responseJSON.message);
                     // Habilitamos nuevamente el botón de guardado
                     $("#btn-guardar").attr("disabled", false);
                     $("#btn-guardar").html("Guardar Cambios");

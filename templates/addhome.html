@@ -126,7 +126,7 @@
           window.location.href = "home";
         },
         error: function (response) {
-          alert(response.responseJSON.message);
+          bootbox.alert(response.responseJSON.message);
 
           $("#btn-addhome").attr("disabled", false);
           $("#btn-addhome").html("Guardar");

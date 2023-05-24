@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
+
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/users">Usuarios</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Agregar Usuario</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="vh-50 bg-grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h3 class="mb-3">Nuevo Usuario </h3>
+                <div class="bg-white shadow rounded">
+                    <div class="row">
+                        <div class="col-md-6 pe-0">
+                            <div class="form-left h-100 py-5 px-5">
+                                <form id="formulario-registro">
+
+                                    <p>Por favor diligencie los siguientes datos para registrar el nuevo usuario al
+                                        sistema</p>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label" for="rol">Rol <span
+                                                class="text-danger">*</span></label>
+                                        <select name="rol " id="rol" class="form-control" required>
+                                            <option value="">Seleccione un rol</option>
+                                            <option value="cliente">Cliente</option>
+                                            <option value="admin">Administrador</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Cedula <span class="text-danger"
+                                                for="campo-correo">*</label>
+                                        <input type="text" id="campo-identificacion"
+                                            class="form-control bg-transparent p-6" placeholder="Cedula" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Primer Nombre <span class="text-danger"
+                                                for="nombre1">*</label>
+                                        <input type="text" id="nombre1" class="form-control bg-transparent p-6"
+                                            placeholder="Primer nombre" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Primer Apellido <span class="text-danger"
+                                                for="apellido1">*</label>
+                                        <input type="text" id="apellido1" class="form-control bg-transparent p-6"
+                                            placeholder="Primer apellido" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Fecha de Nacimiento <span class="text-danger"
+                                                for="fechaNacimiento">*</label>
+                                        <input type="date" id="fechaNacimiento" class="form-control bg-transparent p-6"
+                                            placeholder="Fecha de nacimiento" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Celular<span class="text-danger"
+                                                for="celular">*</label>
+                                        <input type="number" id="celular" class="form-control bg-transparent p-6"
+                                            placeholder="Celular de contacto" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Correo <span class="text-danger"
+                                                for="campo-correo">*</label>
+                                        <input type="email" id="campo-correo" class="form-control bg-transparent p-6"
+                                            placeholder="Correo" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Contraseña <span class="text-danger"
+                                                for="campo-password">*</label>
+                                        <input type="password" id="campo-password"
+                                            class="form-control bg-transparent p-6" placeholder="Contraseña" required>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label class="form-label">Verificar contraseña <span class="text-danger"
+                                                for="campo-verificar-password">*</label>
+                                        <input type="password" id="campo-verificar-password"
+                                            class="form-control bg-transparent p-6" placeholder="Verificar contraseña"
+                                            required>
+                                    </div>
+
+                                    <button class="btn btn-primary btn-primary" type="submit"
+                                        id="btn-registro">Guardar</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+
+    // Validacion de seguridad
+    const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+    if (loggedUser.rol != "admin") {
+        localStorage.setItem('user-ecohome', null);
+        window.location.href = "/";
+    }
+
+    $(document).ready(() => {
+        const formularioRegistro = $("#formulario-registro");
+
+        formularioRegistro.submit((evento) => {
+            evento.preventDefault();
+
+            const rol = $("#rol");
+            const identificacion = $("#campo-identificacion");
+            const nombre1 = $("#nombre1");
+            const apellido1 = $("#apellido1");
+            const fechaNacimiento = $("#fechaNacimiento");
+            const celular = $("#celular");
+            const correo = $("#campo-correo");
+            const password = $("#campo-password");
+            const verificarPassword = $("#campo-verificar-password");
+            const btnRegistro = $("#btn-registro");
+
+            if (!identificacion.val() || !nombre1.val() || !apellido1.val() || !fechaNacimiento.val() || !celular.val() || !correo.val() || !password.val() || !verificarPassword.val() || !rol.val()) {
+                bootbox.alert("Por favor complete todos los campos.");
+                return;
+            }
+
+            if (password.val() !== verificarPassword.val()) {
+                bootbox.alert("Las contraseñas no coinciden.");
+                return;
+            }
+
+            const data = JSON.stringify({
+                rol: rol.val(),
+                identificacion: identificacion.val(),
+                nombre1: nombre1.val(),
+                apellido1: apellido1.val(),
+                fechaNacimiento: fechaNacimiento.val(),
+                celular: celular.val(),
+                correo: correo.val(),
+                password: password.val()
+            });
+
+            btnRegistro.attr("disabled", true);
+            btnRegistro.html("Guardando...");
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:5000/api/users",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                async: true,
+                data: data,
+                success: (response) => {
+                    console.log(response);
+                    bootbox.alert("Registro exitoso." +
+                        "Ya puede ingresar a nuestro sistema");
+                    window.location.href = "/admin/users";
+                },
+                error: (response) => {
+                    bootbox.alert(response.responseJSON.message);
+                    btnRegistro.attr("disabled", false);
+                    btnRegistro.html("Guardar");
+                },
+            });
+        });
+    });
+
+</script>
+{% endblock %}

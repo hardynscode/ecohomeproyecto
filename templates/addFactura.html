@@ -53,7 +53,7 @@
 									</div>
 
 									<div class="col-12">
-										<label>Comsumo del mes <span class="text-danger"
+										<label>Consumo del mes <span class="text-danger"
 												for="consumoMes">*</span></label>
 										<input type="number" class="form-control" id="consumoMes" required>
 									</div>
@@ -135,7 +135,7 @@
 					window.location.href = "/detailshome/{{idCasa}}/facturas";
 				},
 				error: function (response) {
-					alert(response.responseJSON.message);
+					bootbox.alert(response.responseJSON.message);
 
 					btnCrear.attr("disabled", false);
 					btnCrear.html("Agregar Factura");

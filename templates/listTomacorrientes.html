@@ -33,7 +33,9 @@
             </tr>
         </thead>
         <tbody id="list-container">
-            <tr><td colspan="7">Cargando...</td></tr>
+            <tr>
+                <td colspan="7">Cargando...</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -44,11 +46,11 @@
 <script type="text/javascript">
 
     // Validacion de seguridad
-	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
-	if (loggedUser.rol != "cliente") {
-		localStorage.setItem('user-ecohome', null);
-		window.location.href = "/";
-	}
+    const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+    if (loggedUser.rol != "cliente") {
+        localStorage.setItem('user-ecohome', null);
+        window.location.href = "/";
+    }
 
     $(document).ready(function () {
 
@@ -105,25 +107,36 @@
         $("#list-container").on("click", ".eliminar", function () {
             const idRegistro = $(this).attr("registro-id");
 
-            const eliminar = confirm("Desea eliminar este tomacorriente?");
-
-            if (eliminar) {
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/tomacorrientes/" + idRegistro,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    async: true,
-                    success: function (response) {
-                        $("#fila-" + idRegistro).remove();
+            bootbox.confirm({
+                message: 'Desea eliminar este tomacorriente?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
                     },
-                    error: function (response) {
-                        alert(response.responseJSON.message);
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
                     }
-                });
-            }
-
+                },
+                callback: function (eliminar) {
+                    if (eliminar) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/tomacorrientes/" + idRegistro,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (response) {
+                                $("#fila-" + idRegistro).remove();
+                            },
+                            error: function (response) {
+                                bootbox.alert(response.responseJSON.message);
+                            }
+                        });
+                    }
+                }
+            });
         });
     });
 

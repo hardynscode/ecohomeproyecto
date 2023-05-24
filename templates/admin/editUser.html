@@ -2,19 +2,43 @@
 
 {% block content %}
 
+<div class="service-item">
+    <div class="service py-2 px-2">
+        <nav aria-label="breadcrumb px-5">
+            <ol class="breadcrumb px-3">
 
+                <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/users">Usuarios</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Editar Usuario</li>
+            </ol>
+        </nav>
+    </div>
+</div>
 <!-- main -->
 <section class="vh-50 bg-grey">
     <div class="container">
         <div class="row">
             <div class="col-lg-10 offset-lg-1">
-                <h3 class="mb-3">Datos de Contacto</h3>
+                <h3 class="mb-3">Datos del Usuario </h3>
                 <div class="bg-white shadow rounded">
                     <div class="row">
                         <div class="col-md-6 pe-0">
                             <div class="form-left h-100 py-5 px-5">
                                 <form id="form-dataContact" class="row g-3">
                                     <p>Por favor complete toda la información de su perfil:</p>
+                                    <div class="form-outline mb-1">
+                                      <label>identificacion<span class="text-danger">*</span></label>
+                                      <input type="text" id="identificacion" class="form-control" readonly placeholder="identificacion"
+                                          required="required">
+                                    </div>
+                                    <div class="form-outline mb-1">
+                                        <label>Rol<span></span></label>
+                                        <select name="rol " id="rol" class="form-control" required>
+                                            <option value="">Seleccione un rol</option>
+                                            <option value="cliente">Cliente</option>
+                                            <option value="admin">Administrador</option>
+                                        </select>
+                                    </div>
                                     <div class="form-outline mb-1">
                                         <label>Primer Nombre <span class="text-danger">*</span></label>
                                         <input type="text" id="nombre1" class="form-control" placeholder="Primer Nombre"
@@ -69,101 +93,91 @@
 
 {% endblock %}
 
-
 {% block scripts %}
 
-
 <script type="text/javascript">
-    const editando = false;
 
-    $(document).ready(function () {
+$(document).ready(function () {
 
-        const identificacion = usuario.identificacion;
+    // Realizar la solicitud AJAX para obtener los datos del usuario seleccionado
+    $.ajax({
+        type: "GET",
+        url: "http://127.0.0.1:5000/api/users/{{identificacion}}",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        success: function (response) {
+            // Rellenar los campos del formulario con los datos del usuario seleccionado
+            $("#identificacion").val(response.identificacion);
+            $("#rol").val(response.rol);
+            $("#nombre1").val(response.nombre1);
+            $('#nombre2').val(response.nombre2);
+            $("#apellido1").val(response.apellido1);
+            $("#apellido2").val(response.apellido2);
+            $("#fechaNacimiento").val(response.fechaNacimiento);
+            $("#celular").val(response.celular);
+            $("#correo").val(response.correo);
+        },
+        error: function (response) {
+            bootbox.alert(response.responseJSON.message);
+        }
+    });
 
+    // Código para recolectar la data y enviarla al API para actualizar el usuario
+    $("#form-dataContact").submit(function (evento) {
+        evento.preventDefault();
+
+        // Deshabilitar el botón de actualizar y cambiar su texto
+        $("#btn-dataContact").attr("disabled", true);
+        $("#btn-dataContact").html("Espere..");
+
+        // Obtener los valores de los campos de entrada
+        const rol = $("#rol").val();
+        const nombre1 = $("#nombre1").val();
+        const nombre2 = $('#nombre2').val();
+        const apellido1 = $("#apellido1").val();
+        const apellido2 = $("#apellido2").val();
+        const fechaNacimiento = $("#fechaNacimiento").val();
+        const celular = $("#celular").val();
+        const correo = $("#correo").val();
+
+        // Construir el objeto de datos para enviar al API
+        const data = JSON.stringify({
+            identificacion: identificacion, // Usar la identificación del usuario seleccionado
+            rol: rol,
+            nombre1: nombre1,
+            nombre2: nombre2,
+            apellido1: apellido1,
+            apellido2: apellido2,
+            fechaNacimiento: fechaNacimiento,
+            celular: celular,
+            correo: correo
+        });
+
+        // Realizar la solicitud AJAX para actualizar los datos del usuario
         $.ajax({
-            type: "GET",
-            url: "http://127.0.0.1:5000/api/users/" + identificacion,
+            type: "PUT",
+            url: "http://127.0.0.1:5000/api/users/{{identificacion}}",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             async: true,
+            data: data,
             success: function (response) {
-                $("#nombre1").val(response.nombre1);
-                $('#nombre2').val(response.nombre2);
-                $("#apellido1").val(response.apellido1);
-                $("#apellido2").val(response.apellido2);
-                $("#fechaNacimiento").val(response.fechaNacimiento);
-                $("#celular").val(response.celular);
-                $("#correo").val(response.correo);
+                console.log(response);
+                window.location.href = "/admin/users";
             },
             error: function (response) {
                 bootbox.alert(response.responseJSON.message);
+
+                // Habilitar nuevamente el botón de actualizar
+                $("#btn-dataContact").attr("disabled", false);
+                $("#btn-dataContact").html("Actualizar");
             }
         });
-
-        // Codigo para recolectar la data y enviarla al api para actualizar la casa
-        $("#form-dataContact").submit(function (evento) {
-            evento.preventDefault();
-
-            // Deshabilitamos el botón de actualizar y cambiamos su texto
-            $("#btn-dataContact").attr("disabled", true);
-            $("#btn-dataContact").html("Espere..");
-
-
-            // Obtenemos los valores de los campos de entrada
-            const nombre1 = $("#nombre1").val();
-            const nombre2 = $('#nombre2').val();
-            const apellido1 = $("#apellido1").val();
-            const apellido2 = $("#apellido2").val();
-            const fechaNacimiento = $("#fechaNacimiento").val();
-            const celular = $("#celular").val();
-            const correo = $("#correo").val();
-
-            // obtenemos la informacion del usuario del local storage
-            const usuario = JSON.parse(localStorage.getItem('user-ecohome'));
-            const identificacion = usuario.identificacion;
-
-            const data = JSON.stringify({
-                nombre1: nombre1,
-                nombre2: nombre2,
-                apellido1: apellido1,
-                apellido2: apellido2,
-                fechaNacimiento: fechaNacimiento,
-                celular: celular,
-                correo: correo
-            });
-
-            $.ajax({
-                type: "PUT",
-                url: "http://127.0.0.1:5000/api/users/" + identificacion,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                async: true,
-                data: data,
-                success: function (response) {
-                    console.log(response);
-                    
-                    if (usuario.rol == "admin") {
-                        window.location.href = "/admin/home";
-                    } else {
-                        window.location.href = "/home";
-                    }
-                },
-                error: function (response) {
-                    bootbox.alert(response.responseJSON.message);
-
-                    $("#btn-dataContact").attr("disabled", false);
-                    $("#btn-dataContact").html("Actualizar");
-                }
-            });
-        });
-
     });
+});
+
+    
 </script>
-
-
-
-
-
-
-
-{% endblock %}
+ 
+{% endblock %} 

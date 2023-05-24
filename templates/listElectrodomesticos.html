@@ -13,7 +13,8 @@
     <h4 class="text-dark e font-weight-medium px-3">Electrodomesticos - {{idCasa}}</h4>
     <div class="service py-4 px-2">
         <h6 class="text-dark e font-weight-medium px-3">Estos son los Electrodomesticos creados en la casa {{idCasa}}:
-            <a href="/detailshome/{{idCasa}}/electrodomesticos/new" class="btn btn-success" style="float: right;">Agregar
+            <a href="/detailshome/{{idCasa}}/electrodomesticos/new" class="btn btn-success"
+                style="float: right;">Agregar
                 Electrodomestico</a>
         </h6>
     </div>
@@ -34,7 +35,9 @@
             </tr>
         </thead>
         <tbody id="list-container">
-            <tr><td colspan="8">Cargando...</td></tr>
+            <tr>
+                <td colspan="8">Cargando...</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -45,11 +48,11 @@
 <script type="text/javascript">
 
     // Validacion de seguridad
-	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
-	if (loggedUser.rol != "cliente") {
-		localStorage.setItem('user-ecohome', null);
-		window.location.href = "/";
-	}
+    const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+    if (loggedUser.rol != "cliente") {
+        localStorage.setItem('user-ecohome', null);
+        window.location.href = "/";
+    }
 
     $(document).ready(function () {
 
@@ -109,7 +112,7 @@
                                     "<td>" + descripcionTomaActual + "</td>" +
                                     "<td>" + (elemento.estadoConexion || '') + "</td>" +
                                     "<td>" +
-                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/"+elemento.index+"/edit'><i class='fa fa-edit'></i></a>" +
+                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>" +
                                     "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
                                     "</td>" +
                                     "</tr>";
@@ -133,25 +136,36 @@
         $("#list-container").on("click", ".eliminar", function () {
             const idRegistro = $(this).attr("registro-id");
 
-            const eliminar = confirm("Desea eliminar este electrodomestico?");
-
-            if (eliminar) {
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    async: true,
-                    success: function (response) {
-                        $("#fila-" + idRegistro).remove();
+            bootbox.confirm({
+                message: 'Desea eliminar este electrodomestico?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
                     },
-                    error: function (response) {
-                        alert(response.responseJSON.message);
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
                     }
-                });
-            }
-
+                },
+                callback: function (eliminar) {
+                    if (eliminar) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (response) {
+                                $("#fila-" + idRegistro).remove();
+                            },
+                            error: function (response) {
+                                bootbox.alert(response.responseJSON.message);
+                            }
+                        });
+                    }
+                }
+            });
         });
     });
 

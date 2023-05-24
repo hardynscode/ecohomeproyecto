@@ -25,14 +25,16 @@
             <tr>
                 <th scope='col'>#</th>
                 <th scope='col'>Mes facturado</th>
-				<th scope='col'>Periodo facturada</th>
-				<th scope='col'>Valor total facturado</th> 
-                <th scope='col'>Consumo del mes</th>                              
+                <th scope='col'>Periodo facturada</th>
+                <th scope='col'>Valor total facturado</th>
+                <th scope='col'>Consumo del mes</th>
                 <th scope='col' width="100px">Opciones</th>
             </tr>
         </thead>
         <tbody id="list-container">
-            <tr><td colspan="8">Cargando...</td></tr>
+            <tr>
+                <td colspan="8">Cargando...</td>
+            </tr>
         </tbody>
     </table>
 </div>
@@ -43,11 +45,11 @@
 <script type="text/javascript">
 
     // Validacion de seguridad
-	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
-	if (loggedUser.rol != "cliente") {
-		localStorage.setItem('user-ecohome', null);
-		window.location.href = "/";
-	}
+    const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+    if (loggedUser.rol != "cliente") {
+        localStorage.setItem('user-ecohome', null);
+        window.location.href = "/";
+    }
 
     $(document).ready(function () {
 
@@ -89,16 +91,16 @@
                     if (registros) {
                         for (let index = 0; index < registros.length; index++) {
                             const elemento = registros[index];
-                            if (elemento) {                        
+                            if (elemento) {
 
                                 content += "<tr id='fila-" + elemento.index + "'> " +
-                                    "<td>" + (elemento.index || '') + "</td>" +                                    
+                                    "<td>" + (elemento.index || '') + "</td>" +
                                     "<td>" + (elemento.mesFacturado || '') + "</td>" +
-                                    "<td>" + (elemento.fechaInicio || '') + " al "  + (elemento.fechaFin || '')  + "</td>" +                                                          
+                                    "<td>" + (elemento.fechaInicio || '') + " al " + (elemento.fechaFin || '') + "</td>" +
                                     "<td>" + (elemento.precioActual || '') + "</td>" +
-                                    "<td>" + (elemento.comsumoMes || '') + "</td>" +
+                                    "<td>" + (elemento.consumoMes || '') + "</td>" +
                                     "<td>" +
-                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/facturas/"+elemento.index+"/edit'><i class='fa fa-edit'></i></a>" +
+                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/facturas/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>" +
                                     "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
                                     "</td>" +
                                     "</tr>";
@@ -118,30 +120,41 @@
             });
         }
 
-        
+
         // Codigo para solicitar al api eliminar una factura
         $("#list-container").on("click", ".eliminar", function () {
             const idRegistro = $(this).attr("registro-id");
 
-            const eliminar = confirm("Desea eliminar esta factura?");
-
-            if (eliminar) {
-
-                $.ajax({
-                    type: "DELETE",
-                    url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/facturas/" + idRegistro,
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    async: true,
-                    success: function (response) {
-                        $("#fila-" + idRegistro).remove();
+            bootbox.confirm({
+                message: 'Desea eliminar esta factura?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
                     },
-                    error: function (response) {
-                        alert(response.responseJSON.message);
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
                     }
-                });
-            }
-
+                },
+                callback: function (eliminar) {
+                    if (eliminar) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/facturas/" + idRegistro,
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (response) {
+                                $("#fila-" + idRegistro).remove();
+                            },
+                            error: function (response) {
+                                bootbox.alert(response.responseJSON.message);
+                            }
+                        });
+                    }
+                }
+            });
         });
     });
 

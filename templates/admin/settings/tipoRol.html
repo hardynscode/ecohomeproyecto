@@ -8,27 +8,30 @@
 
                 <li class="breadcrumb-item btn-ir-home"><a href="/admin/home">Sistema Administrativo</a></li>
                 <li class="breadcrumb-item"><a href="/admin/settings">Configuraciones</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Zonas de las Casas</li>
+                <li class="breadcrumb-item active" aria-current="page">Tipo Rol</li>
             </ol>
         </nav>
     </div>
 </div>
 
 <div class="row col-lg-12 py-2 px-2 p-lg-5">
-    <form id="form-zonas-casas">
+    <form id="form-tipo-Rol">
+
+
         <table class='table table-responsive table-condensed table-bordered'>
             <thead>
                 <tr>
                     <th scope='col'>Nombre</th>
+                    <th scope='col'>Descripcion</th>
                     <th scope='col'>Opciones</th>
                 </tr>
             </thead>
             <tbody id="list-container">
-                <tr><td colspan="2">Cargando..</td></tr>
+                <tr><td colspan="4">Cargando..</td></tr>
             </tbody>
         </table>
         <div class="col-lg-12">
-            <a href="javascript: void(0);" id="btn-agregar" style="float: left;"
+            <a href="javascript: void(0);" id="btn-agregar-tipo" style="float: left;"
                 class="btn btn-sm btn-success">+</a>
             <button type="submit" value="Guardar" id="btn-guardar" style="float: right;"
                 class="btn btn-sm btn-success">Guardar Cambios</button>
@@ -50,8 +53,8 @@
 
     $(document).ready(function () {
 
-        const tipoSettings = "zonasCasas";
-        let cantidadRegistros = 0;
+        const tipoSettings = "tipoRol";
+        let cantidadRol = 0;
 
         $.ajax({
             type: "GET",
@@ -65,14 +68,13 @@
                 console.log("data inicial", tipos);
                 let content = "";
 
-                console.log(tipos);
-
                 for (const key in tipos) {
                     if (Object.hasOwnProperty.call(tipos, key)) {
-                        cantidadRegistros += 1;
-                        const zonaCasa = tipos[key];
-                        content += "<tr id='tipo-" + cantidadRegistros + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRegistros + "' required placeholder='Nombre' value='" + (zonaCasa || "") + "'/> </td> " +
-                            "<td><a class='btn btn-sm btn-danger eliminar-registro' tipo-id='" + cantidadRegistros + "'><i class='fa fa-trash'></i></a></tr>";
+                        cantidadRol += 1;
+                        const tipoRol= tipos[key];
+                        content += "<tr id='tipo-" + cantidadRol + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRol + "' required readonly placeholder='Nombre' value='" + (tipoRol.nombre || "") + "'/> </td> " +
+                            "<td><input type='text' class='form-control' id='campo-descripcion-" + cantidadRol + "' required placeholder='Descripcion' value='" + (tipoRol.descripcion || "") + "' /> </td>" +
+                            "<td><a class='btn btn-sm btn-danger eliminar-tipo' tipo-id='" + cantidadRol + "'><i class='fa fa-trash'></i></a></tr>";
                     }
                 }
 
@@ -85,20 +87,21 @@
         });
 
         // Evento para agregar al final de la tabla una nueva fila con los campos de un  nuevo registro
-        $("#btn-agregar").click(function () {
-            cantidadRegistros += 1;
-            const content = "<tr id='tipo-" + cantidadRegistros + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRegistros + "' required placeholder='Nombre' value=''/> </td> " +
-                "<td><a class='btn btn-sm btn-danger eliminar-registro' tipo-id='" + cantidadRegistros + "'><i class='fa fa-trash'></i></a></tr>";
+        $("#btn-agregar-tipo").click(function () {
+            cantidadRol += 1;
+            const content = "<tr id='tipo-" + cantidadRol + "'><td><input type='text' class='form-control' id='campo-nombre-" + cantidadRol + "' required placeholder='Nombre' value=''/> </td> " +
+                "<td><input type='text' class='form-control' id='campo-descripcion-" + cantidadRol + "' required placeholder='Descripcion' value='' /> </td>" +
+                "<td><a class='btn btn-sm btn-danger eliminar-tipo' tipo-id='" + cantidadRol + "'><i class='fa fa-trash'></i></a></tr>";
 
             $("#list-container").append(content);
 
         });
 
         // Evento para eliminar la fila seleccionada con los campos de un registro
-        $('#list-container').on('click', 'a.eliminar-registro', function () {
+        $('#list-container').on('click', 'a.eliminar-tipo', function () {
             
             const tipoId = $(this).attr("tipo-id");
-
+            
             bootbox.confirm({
                 message: 'Desea eliminar este elemento?',
                 buttons: {
@@ -119,18 +122,18 @@
                     }
                 }
             });
-            
         });
 
         // Evento para guardar los cambios en los registros
-        $("#form-zonas-casas").submit(function (evento) {
+        $("#form-tipo-Rol").submit(function (evento) {
             evento.preventDefault();
             const data = {};
 
-            for (let index = 1; index <= cantidadRegistros; index++) {
+            for (let index = 1; index <= cantidadRol; index++) {
                 const nombre = $("#campo-nombre-" + index).val();
-                const key = nombre.toLowerCase().replaceAll(" ", "_");
-                data[key] = nombre;
+                const descripcion = $("#campo-descripcion-" + index).val();
+                
+                data[nombre.toLowerCase()] = { nombre, descripcion };
             }
 
             console.log("data a enviar", data);
@@ -159,6 +162,7 @@
                     $("#btn-guardar").html("Guardar Cambios");
                 }
             });
+
         });
     });
 
