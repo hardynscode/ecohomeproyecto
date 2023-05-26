@@ -1,0 +1,306 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="service-item position-relative">
+	<nav aria-label="breadcrumb px-5">
+		<ol class="breadcrumb px-3">
+			<li class="breadcrumb-item btn-ir-home"><a href="/home">Home</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome?idCasa={{idCasa}}">{{idCasa}}</a></li>
+			<li class="breadcrumb-item"><a href="/detailshome/{{idCasa}}/electrodomesticos">Electrodomesticos</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Datos de Consumo</li>
+		</ol>
+	</nav>
+
+	<div class="service py-4 px-2">
+		<h6 class="text-dark e font-weight-medium px-3">Datos de Consumo del Electrodomestico:</h6>
+	</div>
+</div>
+
+<section class="vh-50 ">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 offset-lg-1">
+
+				<div class="bg-white shadow rounded">
+					<div class="row">
+						<div class="col-md-8 pe-0">
+							<div class="form-left h-100 py-5 px-5">
+								<form class="row g-4" id="form-edicion-electrodomestico">
+									<div class="col-12">
+										<label>Tipo de Electrodomestico<span class="text-danger"
+												for="tipoElectrodomestico">*</span></label>
+										<select class="form-control" id="tipoElectrodomestico"
+											name="tipoElectrodomestico" required>
+										</select>
+									</div>
+
+									<div class="col-12">
+										<label>Tipo de Eficiencia <span class="text-danger"
+												for="tipoEficiencia">*</span></label>
+										<select class="form-control" id="tipoEficiencia" name="tipoEficiencia" required>
+										</select>
+									</div>
+
+									<div class="col-12">
+										<label>Consumo por mes (kWh / mes) <span class="text-danger"
+												for="kwhMes">*</span></label>
+										<input type="number" class="form-control" id="kwhMes" required>
+									</div>
+
+									<div class="col-12">
+										<label>Tomacorriente Actual <span class="text-danger"
+												for="tomacorrienteActual">*</span></label>
+										<select class="form-control" id="tomacorrienteActual" name="tomacorrienteActual"
+											required>
+										</select>
+										<p class="text text-danger d-none" id="sin-tomas">No hay tomacorrientes
+											registrados en esta casa
+											<a href="/detailshome/{{idCasa}}/tomacorrientes/new">Agregar</a>
+										</p>
+									</div>
+
+									<div class="col-12">
+										<label>Estado de Conexion<span class="text-danger"
+												for="estadoConexion">*</span></label>
+										<select class="form-control" id="estadoConexion" name="estadoConexion" required>
+											<option value="conectado">Conectado</option>
+											<option value="desconectado">Desconectado</option>
+										</select>
+									</div>
+
+								</form>
+							</div>
+						</div>
+						<div class="col-md-4 ps-0 d-none d-md-block">
+							<div class="form-right h-100 bg-transparent text-black text-center pt-5">
+							</div>
+						</div>
+					</div>
+				</div>
+				<p class="text-end text-secondary mt-3"></p>
+			</div>
+			<div class="col-lg-10 offset-lg-1">
+				<div class="bg-white shadow rounded">
+					<canvas id="grafica"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+
+<script type="text/javascript">
+
+	// Validacion de seguridad
+	const loggedUser = JSON.parse(localStorage.getItem('user-ecohome'));
+	if (loggedUser.rol != "cliente") {
+		localStorage.setItem('user-ecohome', null);
+		window.location.href = "/";
+	}
+
+	let dataElectrodomestico = null;
+
+	// obtenemos la informacion del usuario del local storage
+	const usuarioLogueado = JSON.parse(localStorage.getItem('user-ecohome'));
+	const identificacion = usuarioLogueado.identificacion;
+
+	$(document).ready(function () {
+
+		//Cargar los tipos de electrodomesticos
+		$.ajax({
+			type: "GET",
+			url: "http://127.0.0.1:5000/api/settings?tipo=tiposElectrodomesticos",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			async: true,
+			success: function (response) {
+
+				const registros = response;
+				let content = "<option value=''>Seleccione..</option>";
+
+				for (const key in registros) {
+					if (Object.hasOwnProperty.call(registros, key)) {
+						const elemento = registros[key];
+						content += "<option value='" + key + "'>" + elemento + "</option>";
+					}
+				}
+				$("#tipoElectrodomestico").html(content);
+				cargarTiposEficiencia();
+			},
+			error: function (response) {
+				console.log(response.responseJSON.message);
+			}
+		});
+
+		// Cargar los tipos de eficiencia en el selector
+		function cargarTiposEficiencia() {
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/settings?tipo=tiposEficiencia",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+
+					const registros = response;
+					let content = "<option value=''>Seleccione..</option>";
+
+					for (const key in registros) {
+						if (Object.hasOwnProperty.call(registros, key)) {
+							const elemento = registros[key];
+							content += "<option value='" + key + "'>Tipo: " + elemento.nombre + " (Desde " + elemento.limiteInferior + "% hasta " + elemento.limiteSuperior + " %)</option>";
+						}
+					}
+					$("#tipoEficiencia").html(content);
+					cargarTomacorrientes();
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		// cargamos los tomacorrientes 
+		function cargarTomacorrientes() {
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/tomacorrientes",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+					const tomacorrientes = response;
+
+					let content = "<option value=''>Seleccione..</option>";
+					let cantidadTomacorrientes = 0;
+					for (const key in tomacorrientes) {
+						if (Object.hasOwnProperty.call(tomacorrientes, key)) {
+							const tomaActual = tomacorrientes[key];
+							cantidadTomacorrientes += 1;
+							const descripcionTomaActual = "<b>Zona:</b> " + tomaActual.zona + " - <b>Tipo:</b> " + tomaActual.tipo + " <b>Descripcion: </b>" + tomaActual.descripcion;
+							content += "<option value='" + key + "'>" + descripcionTomaActual + "</option>";
+						}
+					}
+					$("#tomacorrienteActual").html(content);
+
+					if (cantidadTomacorrientes == 0) {
+						$("#sin-tomas").removeClass("d-none");
+					}
+					cargarTiposElectrodomesticos();
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		// Cargar los tipos de electrodomesticos y despegarlos en el selector
+		function cargarTiposElectrodomesticos() {
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/settings?tipo=tiposElectrodomesticos",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+
+					const registros = response;
+					console.log("tipos e", registros);
+					let content = "<option value=''>Seleccione..</option>";
+
+					for (const key in registros) {
+						if (Object.hasOwnProperty.call(registros, key)) {
+							const elemento = registros[key];
+							content += "<option value='" + key + "'>" + elemento + "</option>";
+						}
+					}
+
+					$("#tipoElectrodomestico").html(content);
+
+					cargarElectrodomesticoParaEditar();
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		function cargarElectrodomesticoParaEditar() {
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/{{idElectrodomestico}}",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+
+					dataElectrodomestico = response;
+
+					console.log("data", dataElectrodomestico);
+
+					$("#estadoConexion").val(dataElectrodomestico.estadoConexion);
+					$('#kwhMes').val(dataElectrodomestico.kwhMes);
+					$("#tipoEficiencia").val(dataElectrodomestico.tipoEficiencia);
+					$("#tipoElectrodomestico").val(dataElectrodomestico.tipoElectrodomestico);
+					$("#tomacorrienteActual").val(dataElectrodomestico.tomacorrienteActual);
+
+					cargarDataConsumo();
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		function cargarDataConsumo() {
+			const etiquetas = ["2023-05-25 06:00 pm", "2023-05-25 06:10 pm", "2023-05-25 06:20 pm", "2023-05-25 06:30 pm"];
+			const datosVentas2020 = {
+				label: "Potencia",
+				data: [0.98, 0.22, 0.36, 0.45], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
+				backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
+				borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+				borderWidth: 1,// Ancho del borde
+			};
+
+			// Obtener una referencia al elemento canvas del DOM
+			const $grafica = $("#grafica");			
+		
+			new Chart($grafica, {
+				type: 'line',// Tipo de gráfica
+				data: {
+					labels: etiquetas,
+					datasets: [
+						datosVentas2020,
+						// Aquí más datos...
+					]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+					},
+				}
+			});
+		}
+	});
+
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+</body>
+
+</html>

@@ -54,6 +54,10 @@ def addElectrodomesticoHome(idCasa):
 def updateElectrodomesticoHome(idCasa, idElectrodomestico):
     return render_template('updateElectrodomestico.html', idCasa=idCasa, idElectrodomestico=idElectrodomestico)
 
+@app.route('/detailshome/<idCasa>/electrodomesticos/<idElectrodomestico>/consumo')
+def consumoElectrodomesticoHome(idCasa, idElectrodomestico):
+    return render_template('consumoElectrodomestico.html', idCasa=idCasa, idElectrodomestico=idElectrodomestico)
+
 @app.route('/detailshome/<idCasa>/addFactura/new')
 def addFactura(idCasa):
     return render_template('addFactura.html', idCasa=idCasa)

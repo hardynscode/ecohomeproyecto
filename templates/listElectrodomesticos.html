@@ -31,7 +31,7 @@
                 <th scope='col'>kWh/mes</th>
                 <th scope='col'>Tomacorriente Actual</th>
                 <th scope="col">Estado de Conexion</th>
-                <th scope='col' width="100px">Opciones</th>
+                <th scope='col' width="150px">Opciones</th>
             </tr>
         </thead>
         <tbody id="list-container">
@@ -112,7 +112,8 @@
                                     "<td>" + descripcionTomaActual + "</td>" +
                                     "<td>" + (elemento.estadoConexion || '') + "</td>" +
                                     "<td>" +
-                                    "<a class='btn btn-sm btn-primary mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>";
+                                    "<a class='btn btn-sm btn-primary mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>"+
+                                    "<a class='btn btn-sm btn-info mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/consumo'><i class='fa fa-chart-line'></i></a>";
                                     
                                     if (elemento.estadoConexion == "desconectado") {
                                         content += "<a class='btn btn-sm btn-success conectar' title='Conectar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-plug-circle-plus'></i></a>";
