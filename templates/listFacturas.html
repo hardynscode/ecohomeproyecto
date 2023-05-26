@@ -28,12 +28,13 @@
                 <th scope='col'>Periodo facturada</th>
                 <th scope='col'>Valor total facturado</th>
                 <th scope='col'>Consumo del mes</th>
+                <th scope='col'>Estado</th>
                 <th scope='col' width="100px">Opciones</th>
             </tr>
         </thead>
         <tbody id="list-container">
             <tr>
-                <td colspan="8">Cargando...</td>
+                <td colspan="7">Cargando...</td>
             </tr>
         </tbody>
     </table>
@@ -99,10 +100,16 @@
                                     "<td>" + (elemento.fechaInicio || '') + " al " + (elemento.fechaFin || '') + "</td>" +
                                     "<td>" + (elemento.precioActual || '') + "</td>" +
                                     "<td>" + (elemento.consumoMes || '') + "</td>" +
+                                    "<td>" + (elemento.estado || '') + "</td>" +
                                     "<td>" +
-                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/facturas/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>" +
-                                    "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
-                                    "</td>" +
+                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/facturas/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>";
+                                                                        
+                                    if (elemento.estado == "activo") {
+                                        content += "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>";
+                                    } else {
+                                        content += "<a class='btn btn-sm btn-danger disabled' title='Deshabilitar' href='#'><i class='fa fa-trash'></i></a>";
+                                    }
+                                    content += "</td>" +
                                     "</tr>";
                             }
 
@@ -126,7 +133,7 @@
             const idRegistro = $(this).attr("registro-id");
 
             bootbox.confirm({
-                message: 'Desea eliminar esta factura?',
+                message: 'Desea desactivar esta factura?',
                 buttons: {
                     confirm: {
                         label: 'Si',
@@ -146,7 +153,7 @@
                             contentType: "application/json; charset=utf-8",
                             async: true,
                             success: function (response) {
-                                $("#fila-" + idRegistro).remove();
+                                window.location.reload();
                             },
                             error: function (response) {
                                 bootbox.alert(response.responseJSON.message);

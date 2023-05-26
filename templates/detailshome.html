@@ -44,24 +44,31 @@
                     </select>
                   </div>
                   <div class="col-12">
+                    <label>Estado<span class="text-danger" for="estado">*</span></label>
+                    <select class="form-control" id="estado" name="estado" required>
+                      <option value="activo">Activo</option>
+                      <option value="inactivo">Inactivo</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
                     <button type="submit" id="btn btn-success" class="btn btn-success px-4"
                       value="actualizar">Actualizar</button>
-                    <a href="javascript: void();" id="eliminar-casa" class="btn btn-danger px-4 float-end">Eliminar</a>
+                    <a href="javascript: void();" id="desactivar-casa" class="btn btn-danger px-4 float-end">Desactivar</a>
                   </div>
                 </form>
               </div>
             </div>
             <div class="col-md-4 pt-5 d-md-block">
 
-              <a class="btn btn-primary mt-3 mr-2" href="/detailshome/{{idCasa}}/tomacorrientes">
+              <a class="btn btn-primary mt-3 mr-2" id="btn-tomacorrientes" href="/detailshome/{{idCasa}}/tomacorrientes">
                 <i class="fa fa-plug"></i> Administrar Tomacorrientes <span id="cant-tomas"></span>
               </a>
 
-              <a class="btn btn-primary mt-3 mr-2" href="/detailshome/{{idCasa}}/electrodomesticos">
+              <a class="btn btn-primary mt-3 mr-2" id="btn-electrodomesticos" href="/detailshome/{{idCasa}}/electrodomesticos">
                 <i class="fa fa-laptop"></i> Administrar Electrodomesticos <span id="cant-electrodomesticos"></span>
               </a>
 
-              <a class="btn btn-primary mt-3 mr-2" href="/detailshome/{{idCasa}}/facturas">
+              <a class="btn btn-primary mt-3 mr-2" id="btn-facturas" href="/detailshome/{{idCasa}}/facturas">
                 <i class="fa fa-file"></i> Ver Facturas Registradas <span id="cant-facturas"></span>
               </a>
 
@@ -125,6 +132,14 @@
         dataCasa = data;
         $("#nombreCasa").val(data.nombreCasa);
         $("#direccion").val(data.direccion);
+        $("#estado").val(data.estado);
+
+        if (data.estado == "inactivo") {
+          $("#desactivar-casa").addClass("disabled");
+          $("#btn-tomacorrientes").addClass("disabled");
+          $("#btn-electrodomesticos").addClass("disabled");
+          $("#btn-facturas").addClass("disabled");
+        }
 
         $("#cant-tomas").html("(" + dataCasa.tomacorrientes.length + ")");
         // $("#cant-electrodomesticos").html("(" + dataCasa.electrodomesticos.length + ")");
@@ -145,6 +160,7 @@
       const nombreCasa = $("#nombreCasa").val();
       const tipoCasa = $('#tipoCasa').val();
       const direccion = $("#direccion").val();
+      const estado = $("#estado").val();
       const pais = $("#pais option:selected").val();
       const departamento = $("#departamento option:selected").val();
       const ciudad = $("#ciudad option:selected").val();
@@ -159,7 +175,8 @@
         direccion: direccion,
         pais: pais,
         departamento: departamento,
-        ciudad: ciudad
+        ciudad: ciudad,
+        estado: estado
       });
 
       $.ajax({
@@ -182,10 +199,10 @@
       });
     });
 
-    // Codigo para solicitar al api eliminar la casa
-    $("#eliminar-casa").click(function () {
+    // Codigo para solicitar al api desactivar la casa
+    $("#desactivar-casa").click(function () {
       bootbox.confirm({
-        message: 'Desea eliminar esta casa?',
+        message: 'Desea desactivar esta casa?',
         buttons: {
           confirm: {
             label: 'Si',
@@ -196,10 +213,10 @@
             className: 'btn-danger'
           }
         },
-        callback: function (eliminar) {
-          if (eliminar) {
-            $("#eliminar-casa").attr("disabled", true);
-            $("#eliminar-casa").html("Espere..");
+        callback: function (desactivar) {
+          if (desactivar) {
+            $("#desactivar-casa").attr("disabled", true);
+            $("#desactivar-casa").html("Espere..");
 
             $.ajax({
               type: "DELETE",
@@ -214,8 +231,8 @@
               error: function (response) {
                 bootbox.alert(response.responseJSON.message);
 
-                $("#eliminar-casa").attr("disabled", false);
-                $("#eliminar-casa").html("Eliminar");
+                $("#desactivar-casa").attr("disabled", false);
+                $("#desactivar-casa").html("Desactivar");
               }
             });
           }

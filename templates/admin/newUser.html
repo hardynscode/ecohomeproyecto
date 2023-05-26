@@ -32,9 +32,6 @@
                                         <label class="form-label" for="rol">Rol <span
                                                 class="text-danger">*</span></label>
                                         <select name="rol " id="rol" class="form-control" required>
-                                            <option value="">Seleccione un rol</option>
-                                            <option value="cliente">Cliente</option>
-                                            <option value="admin">Administrador</option>
                                         </select>
                                     </div>
 
@@ -121,6 +118,34 @@
     }
 
     $(document).ready(() => {
+
+        // Cargar los roles para mostrarlos en el selector
+		$.ajax({
+			type: "GET",
+			url: "http://127.0.0.1:5000/api/settings?tipo=tipoRol",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			async: true,
+			success: function (response) {
+
+				const registros = response;
+				let content = "<option value=''>Seleccione..</option>";
+
+				for (const key in registros) {
+					if (Object.hasOwnProperty.call(registros, key)) {
+						const elemento = registros[key];
+						content += "<option value='" + key + "'>" + elemento.nombre + "</option>";
+					}
+				}
+				$("#rol").html(content);
+			},
+			error: function (response) {
+				console.log(response.responseJSON.message);
+			}
+		});
+
+
+
         const formularioRegistro = $("#formulario-registro");
 
         formularioRegistro.submit((evento) => {

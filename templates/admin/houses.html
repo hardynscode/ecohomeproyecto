@@ -37,11 +37,12 @@
                 <th scope='col'>Departamento</th>
                 <th scope='col'>Ciudad</th>
                 <th scope='col'>Usuario</th>
+                <th scope='col'>Estado</th>
             </tr>
         </thead>
         <tbody id="houses-container">
             <tr>
-                <td colspan="7">Cargando...</td>
+                <td colspan="8">Cargando...</td>
             </tr>
         </tbody>
     </table>
@@ -84,6 +85,7 @@
                             "<td>" + (house.departamento || '') + "</td>" +
                             "<td>" + (house.ciudad || '') + "</td>" +
                             "<td>" + (house.identificacionCliente || '') + "</td>" +
+                            "<td>" + (house.estado || 'activo') + "</td>" +
                             "</tr>";
 
                     }

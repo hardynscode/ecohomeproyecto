@@ -126,8 +126,10 @@
 
             for (let index = 1; index <= cantidadRegistros; index++) {
                 const nombre = $("#campo-nombre-" + index).val();
-                const key = nombre.toLowerCase().replaceAll(" ", "_");
-                data[key] = nombre;
+                if (nombre) {
+                    const key = nombre.toLowerCase().replaceAll(" ", "_");
+                    data[key] = nombre;
+                }
             }
 
             console.log("data a enviar", data);

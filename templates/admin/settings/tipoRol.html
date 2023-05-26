@@ -118,7 +118,7 @@
                     if (eliminar) {
                         const idEliminar = "tipo-" + tipoId;
                         $("#" + idEliminar).remove();
-                        cantidadRegistros -= 1;
+                        cantidadRol -= 1;
                     }
                 }
             });
@@ -133,7 +133,9 @@
                 const nombre = $("#campo-nombre-" + index).val();
                 const descripcion = $("#campo-descripcion-" + index).val();
                 
-                data[nombre.toLowerCase()] = { nombre, descripcion };
+                if (nombre) {
+                    data[nombre.toLowerCase()] = { nombre, descripcion };
+                }
             }
 
             console.log("data a enviar", data);

@@ -84,9 +84,13 @@
                                 "<td>" + (elemento.descripcion || '') + "</td>" +
                                 "<td>" + (elemento.estado || '') + "</td>" +
                                 "<td>" +
-                                "<a class='btn btn-sm btn-success mr-2 d-none' href='#'><i class='fa fa-edit'></i></a>" +
-                                "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
-                                "</td>" +
+                                "<a class='btn btn-sm btn-success mr-2 d-none' href='#'><i class='fa fa-edit'></i></a>";
+                                if (elemento.estado == "activo") {
+                                    content += "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>";
+                                } else {
+                                    content += "<a class='btn btn-sm btn-danger disabled' href='#'><i class='fa fa-trash'></i></a>";
+                                }
+                                content +="</td>" +
                                 "</tr>";
                         }
 
@@ -108,7 +112,7 @@
             const idRegistro = $(this).attr("registro-id");
 
             bootbox.confirm({
-                message: 'Desea eliminar este tomacorriente?',
+                message: 'Desea desactivar este tomacorriente?',
                 buttons: {
                     confirm: {
                         label: 'Si',
@@ -128,7 +132,7 @@
                             contentType: "application/json; charset=utf-8",
                             async: true,
                             success: function (response) {
-                                $("#fila-" + idRegistro).remove();
+                                window.location.reload();
                             },
                             error: function (response) {
                                 bootbox.alert(response.responseJSON.message);

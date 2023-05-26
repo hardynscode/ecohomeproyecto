@@ -39,12 +39,13 @@
                 <th scope='col'>Celular</th>
                 <th scope='col'>Fecha Nacimiento</th>
                 <th scope='col'>Rol</th>
+                <th scope='col'>Estado</th>
                 <th scope='col' width="140px">Opciones</th>
             </tr>
         </thead>
         <tbody id="users-container">
             <tr>
-                <td colspan="8">Cargando..</td>
+                <td colspan="9">Cargando..</td>
             </tr>
         </tbody>
     </table>
@@ -90,14 +91,17 @@
                             "<td>" + (user.celular || '') + "</td>" +
                             "<td>" + (user.fechaNacimiento || '') + "</td>" +
                             "<td>" + (user.rol || 'cliente') + "</td>" +
+                            "<td>" + (user.estado || 'activo') + "</td>" +
                             "<td>";
 
-                        if (user.rol != "admin") {
+                        if (user.rol != "admin" && user.estado != "inactivo") {
                             content += "<a class='btn btn-sm btn-primary mr-2 impersonar-usuario' id-usuario='" + user.identificacion + "' href='javascript:void(0);' title='Impersonar'><i class='fa fa-user'></i></a>";
                         }
-                        content += "<a class='btn btn-sm btn-success mr-2' data-id='" + user.identificacion + "' href='/admin/editUser/" + user.identificacion + " ' title='Editar'><i class='fa fa-edit'></i></a>" +
-                            "<a class='btn btn-sm btn-danger'  registro-id='" + user.identificacion + "'href='#' title='Eliminar'><i class='fa fa-trash'></i></a>" +
-                            "</tr>";
+                        content += "<a class='btn btn-sm btn-success mr-2' data-id='" + user.identificacion + "' href='/admin/editUser/" + user.identificacion + " ' title='Editar'><i class='fa fa-edit'></i></a>";
+                        if (user.estado != "inactivo") {
+                            content += "<a class='btn btn-sm btn-danger'  registro-id='" + user.identificacion + "'href='#' title='Eliminar'><i class='fa fa-trash'></i></a>";    
+                        }
+                        content += "</tr>";
 
                     }
                     $("#users-container").html(content);
@@ -131,7 +135,7 @@
             const idRegistro = $(this).attr("registro-id");
 
             bootbox.confirm({
-                message: 'Desea eliminar este usuario?',
+                message: 'Desea desactivar a este usuario? <br>Un usuario inactivo no podra iniciar sesion',
                 buttons: {
                     confirm: {
                         label: 'Si',

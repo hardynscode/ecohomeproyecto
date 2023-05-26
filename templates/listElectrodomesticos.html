@@ -112,9 +112,14 @@
                                     "<td>" + descripcionTomaActual + "</td>" +
                                     "<td>" + (elemento.estadoConexion || '') + "</td>" +
                                     "<td>" +
-                                    "<a class='btn btn-sm btn-success mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>" +
-                                    "<a class='btn btn-sm btn-danger eliminar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-trash'></i></a>" +
-                                    "</td>" +
+                                    "<a class='btn btn-sm btn-primary mr-2' href='/detailshome/{{idCasa}}/electrodomesticos/" + elemento.index + "/edit'><i class='fa fa-edit'></i></a>";
+                                    
+                                    if (elemento.estadoConexion == "desconectado") {
+                                        content += "<a class='btn btn-sm btn-success conectar' title='Conectar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-plug-circle-plus'></i></a>";
+                                    } else {
+                                        content += "<a class='btn btn-sm btn-danger desconectar' title='Desconectar' registro-id='" + elemento.index + "' href='#'><i class='fa fa-plug-circle-minus'></i></a>";
+                                    }
+                                    content += "</td>" +
                                     "</tr>";
                             }
 
@@ -132,12 +137,12 @@
             });
         }
 
-        // Codigo para solicitar al api eliminar un electrodomestico
-        $("#list-container").on("click", ".eliminar", function () {
+        // Codigo para solicitar al api desconectar un electrodomestico
+        $("#list-container").on("click", ".desconectar", function () {
             const idRegistro = $(this).attr("registro-id");
 
             bootbox.confirm({
-                message: 'Desea eliminar este electrodomestico?',
+                message: 'Desea desconectar este electrodomestico?',
                 buttons: {
                     confirm: {
                         label: 'Si',
@@ -148,16 +153,52 @@
                         className: 'btn-danger'
                     }
                 },
-                callback: function (eliminar) {
-                    if (eliminar) {
+                callback: function (desconectar) {
+                    if (desconectar) {
                         $.ajax({
-                            type: "DELETE",
-                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro,
+                            type: "PUT",
+                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro + "/off",
                             dataType: "json",
                             contentType: "application/json; charset=utf-8",
                             async: true,
                             success: function (response) {
-                                $("#fila-" + idRegistro).remove();
+                                window.location.reload();
+                            },
+                            error: function (response) {
+                                bootbox.alert(response.responseJSON.message);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        // Codigo para solicitar al api conectar un electrodomestico
+        $("#list-container").on("click", ".conectar", function () {
+            const idRegistro = $(this).attr("registro-id");
+
+            bootbox.confirm({
+                message: 'Desea conectar este electrodomestico?',
+                buttons: {
+                    confirm: {
+                        label: 'Si',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (desconectar) {
+                    if (desconectar) {
+                        $.ajax({
+                            type: "PUT",
+                            url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/" + idRegistro + "/on",
+                            dataType: "json",
+                            contentType: "application/json; charset=utf-8",
+                            async: true,
+                            success: function (response) {
+                                window.location.reload();
                             },
                             error: function (response) {
                                 bootbox.alert(response.responseJSON.message);
