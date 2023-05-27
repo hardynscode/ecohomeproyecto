@@ -26,6 +26,7 @@
 							<div class="form-left h-100 py-5 px-2">
 								<form class="row g-4" id="form-edicion-electrodomestico">
 									<div class="col-12">
+										<h4>Datos Electrodomestico</h4>
 										<label>Tipo de Electrodomestico</label>
 										<select class="form-control text-small" id="tipoElectrodomestico"
 											name="tipoElectrodomestico" disabled>
@@ -63,31 +64,81 @@
 								</form>
 							</div>
 						</div>
-						<div class="col-md-8">
-							<div class="py-5 px-1">
-								<canvas id="grafica"></canvas>
+						<div class="col-md-8 container-grafica-1 d-none">
+							<div class="col-lg-12">
+								<div class="pt-5 pb-2 px-1">
+									<canvas id="grafica1"></canvas>
+								</div>
+								<div class="form-rigth center h-100 pb-5 col-md-12">
+									<h4>Calculos - Consumo</h4>
+									<table class="table table-condensed text-small">
+										<tr>
+											<th><label>Consumo por hora (Wh)</label></th>
+											<th><label>Tiempo Transcurrido (Horas)</label></th>
+											<th><label>Consumo Total (Wh)</label></th>
+											<th><label>Potencia Promedio (vatios)</label></th>
+											<th><label>Consumo x Potencia Promedio = Consumo Real</label></th>
+										</tr>
+										<tr>
+											<td id="g1watsHora"></td>
+											<td id="g1tiempoTranscurrido"></td>
+											<td id="g1consumoTotal"></td>
+											<td id="g1promedioPotencia"></td>
+											<td id="g1consumoPorPotencia"></td>
+										</tr>
+									</table>
+								</div>
 							</div>
-							<div class="form-rigth center h-100 pb-5 px-5 col-md-12">
-								<h3>Calculos</h3>
-								<div class="col-lg-7 pb-2">
-									<label>Consumo por hora (Wh)</label>
-									<input type="number" class="form-control text-small" id="watsHora" disabled>
+						</div>
+						<div class="col-md-8  container-grafica-2 d-none">
+							<div class="col-lg-12">
+								<div class="pt-5 pb-2 px-1">
+									<canvas id="grafica2"></canvas>
 								</div>
-								<div class="col-lg-7 pb-2">
-									<label>Tiempo Transcurrido (Horas)</label>
-									<input type="number" class="form-control text-small" id="tiempoTranscurrido" disabled>
+								<div class="form-rigth center h-100 pb-5 col-md-12">
+									<h4>Calculos - Consumo</h4>
+									<table class="table table-condensed text-small">
+										<tr>
+											<th><label>Consumo por hora (Wh)</label></th>
+											<th><label>Tiempo Transcurrido (Horas)</label></th>
+											<th><label>Consumo Total (Wh)</label></th>
+											<th><label>Potencia Promedio (vatios)</label></th>
+											<th><label>Consumo x Potencia Promedio = Consumo Real</label></th>
+										</tr>
+										<tr>
+											<td id="g2watsHora"></td>
+											<td id="g2tiempoTranscurrido"></td>
+											<td id="g2consumoTotal"></td>
+											<td id="g2promedioPotencia"></td>
+											<td id="g2consumoPorPotencia"></td>
+										</tr>
+									</table>
 								</div>
-								<div class="col-lg-7 pb-2">
-									<label>Consumo Total (Wh)</label>
-									<input type="number" class="form-control text-small" id="consumoTotal" disabled>
+							</div>
+						</div>
+						<div class="col-md-8  container-grafica-3 d-none">
+							<div class="col-lg-12">
+								<div class="pt-5 pb-2 px-1">
+									<canvas id="grafica3"></canvas>
 								</div>
-								<div class="col-lg-7 pb-2">
-									<label>Potencia Promedio (vatios)</label>
-									<input type="number" class="form-control text-small" id="promedioPotencia" disabled>
-								</div>
-								<div class="col-lg-7 pb-2">
-									<label>Consumo x Potencia Promedio = Consumo Real</label>
-									<input type="number" class="form-control text-small" id="consumoPorPotencia" disabled>
+								<div class="form-rigth center h-100 pb-5 col-md-12">
+									<h4>Calculos - Consumo</h4>
+									<table class="table table-condensed text-small">
+										<tr>
+											<th><label>Consumo por hora (Wh)</label></th>
+											<th><label>Tiempo Transcurrido (Horas)</label></th>
+											<th><label>Consumo Total (Wh)</label></th>
+											<th><label>Potencia Promedio (vatios)</label></th>
+											<th><label>Consumo x Potencia Promedio = Consumo Real</label></th>
+										</tr>
+										<tr>
+											<td id="g3watsHora"></td>
+											<td id="g3tiempoTranscurrido"></td>
+											<td id="g3consumoTotal"></td>
+											<td id="g3promedioPotencia"></td>
+											<td id="g3consumoPorPotencia"></td>
+										</tr>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -114,7 +165,10 @@
 	}
 
 	let dataElectrodomestico = null;
-	let dataConsumo = null;
+
+	const calculosGrafica1 = {};
+	const calculosGrafica2 = {};
+	const calculosGrafica3 = {};
 
 	// obtenemos la informacion del usuario del local storage
 	const usuarioLogueado = JSON.parse(localStorage.getItem('user-ecohome'));
@@ -189,15 +243,17 @@
 
 					let content = "<option value=''>Seleccione..</option>";
 					let cantidadTomacorrientes = 0;
+					let descripcionTomaActual = '';
 					for (const key in tomacorrientes) {
 						if (Object.hasOwnProperty.call(tomacorrientes, key)) {
 							const tomaActual = tomacorrientes[key];
 							cantidadTomacorrientes += 1;
-							const descripcionTomaActual = "<b>Zona:</b> " + tomaActual.zona + " - <b>Tipo:</b> " + tomaActual.tipo + " <b>Descripcion: </b>" + tomaActual.descripcion;
-							content += "<option value='" + key + "'>" + descripcionTomaActual + "</option>";
+							const descripcionToma = "<b>Zona:</b> " + tomaActual.zona + " - <b>Tipo:</b> " + tomaActual.tipo + " " + tomaActual.descripcion;
+							content += "<option value='" + key + "'>" + descripcionToma + "</option>";
 						}
 					}
 					$("#tomacorrienteActual").html(content);
+					$("#tomacorrienteActual").attr("title", descripcionTomaActual);
 
 					if (cantidadTomacorrientes == 0) {
 						$("#sin-tomas").removeClass("d-none");
@@ -257,14 +313,30 @@
 
 					const horasMes = 730;
 					const watsMes = dataElectrodomestico.kwhMes * 1000;
-					const watsHora = watsMes / horasMes;
-					$("#watsHora").val(watsHora);
+					calculosGrafica1.watsHora = (watsMes / horasMes).toFixed(3);
+					calculosGrafica2.watsHora = calculosGrafica1.watsHora;
+					calculosGrafica3.watsHora = calculosGrafica1.watsHora;
+					$("#g1watsHora").html(calculosGrafica1.watsHora);
+					$("#g2watsHora").html(calculosGrafica2.watsHora);
+					$("#g3watsHora").html(calculosGrafica3.watsHora);
 
 					$("#tipoEficiencia").val(dataElectrodomestico.tipoEficiencia);
 					$("#tipoElectrodomestico").val(dataElectrodomestico.tipoElectrodomestico);
 					$("#tomacorrienteActual").val(dataElectrodomestico.tomacorrienteActual);
 
-					cargarDataConsumo();
+					console.log();
+					if (dataElectrodomestico.tipoElectrodomestico == "celular") {
+						cargarDataGrafica2();
+						$(".container-grafica-2").removeClass("d-none");
+
+					} else if (dataElectrodomestico.tipoElectrodomestico == "computador") {
+						cargarDataGrafica3();
+						$(".container-grafica-3").removeClass("d-none");
+					} else {
+						cargarDataGrafica1();
+						$(".container-grafica-1").removeClass("d-none");
+					}
+
 				},
 				error: function (response) {
 					console.log(response.responseJSON.message);
@@ -272,7 +344,7 @@
 			});
 		}
 
-		function cargarDataConsumo() {
+		function cargarDataGrafica1() {
 
 			$.ajax({
 				type: "GET",
@@ -281,8 +353,8 @@
 				contentType: "application/json; charset=utf-8",
 				async: true,
 				success: function (response) {
-					dataConsumo = response;
-					pintarGrafica(dataConsumo);
+					const dataConsumo = response;
+					pintarGrafica1(dataConsumo);
 				},
 				error: function (response) {
 					console.log(response.responseJSON.message);
@@ -290,7 +362,7 @@
 			});
 		}
 
-		function pintarGrafica(dataConsumo) {
+		function pintarGrafica1(dataConsumo) {
 
 			const etiquetas = [];
 			const potencia = [];
@@ -299,26 +371,30 @@
 				potencia.push(element.potencia);
 			});
 
+			// sumamos todas las potencias para luego obtener el promedio
 			const sumatoria = potencia.reduce(function (a, b) {
 				return a + b;
 			}, 0);
-			const promedioPotencia = sumatoria / potencia.length;
-			$("#promedioPotencia").val(promedioPotencia);
 
+			calculosGrafica1.promedioPotencia = (sumatoria / potencia.length).toFixed(3);
+			$("#g1promedioPotencia").html(calculosGrafica1.promedioPotencia);
 
+			// calculamos la fecha inicial y final para luego obtener la diferencia en horas
 			const fecha1 = moment(etiquetas[0], "YYYY-MM-DD HH:mm:ss");
 			const fecha2 = moment(etiquetas[etiquetas.length - 1], "YYYY-MM-DD HH:mm:ss");
 
-			const horasTranscurridas = fecha2.diff(fecha1, 'h'); // Diff in hours
-			$("#tiempoTranscurrido").val(horasTranscurridas);
+			calculosGrafica1.tiempoTranscurrido = fecha2.diff(fecha1, 'h'); // Diff in hours
+			$("#g1tiempoTranscurrido").html(calculosGrafica1.tiempoTranscurrido);
 
-			const consumoTotal = horasTranscurridas * $("#watsHora").val();
-			$("#consumoTotal").val(consumoTotal);
+			// calculamos el consulo total normal multiplicando las horas por el dato de consumo por hora del electrodomestico
+			calculosGrafica1.consumoTotal = (calculosGrafica1.tiempoTranscurrido * calculosGrafica1.watsHora).toFixed(3);
+			$("#g1consumoTotal").html(calculosGrafica1.consumoTotal);
 
-			const consumoPorPotencia = consumoTotal * promedioPotencia;
-			$("#consumoPorPotencia").val(consumoPorPotencia);
+			// calculamos el consumo acorde al promedio de potencia por hora
+			calculosGrafica1.consumoPorPotencia = (calculosGrafica1.consumoTotal * calculosGrafica1.promedioPotencia).toFixed(3);
+			$("#g1consumoPorPotencia").html(calculosGrafica1.consumoPorPotencia);
 
-			const datosVentas2020 = {
+			const datosGrafica1 = {
 				label: "Potencia",
 				data: potencia,
 				backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
@@ -327,14 +403,244 @@
 			};
 
 			// Obtener una referencia al elemento canvas del DOM
-			const $grafica = $("#grafica");
+			const $grafica1 = $("#grafica1");
 
-			new Chart($grafica, {
-				type: 'line',// Tipo de gráfica
+			new Chart($grafica1, {
+				type: 'line',
 				data: {
 					labels: etiquetas,
 					datasets: [
-						datosVentas2020,
+						datosGrafica1,
+						// Aquí más datos...
+					]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+					},
+				}
+			});
+		}
+
+		function cargarDataGrafica2() {
+
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/{{idElectrodomestico}}/consumo2",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+					const dataConsumo2 = Object.values(response);
+					if (dataConsumo2) {
+						const newDataConsumo = dataConsumo2
+							.filter(({ datetime, irms, power }) => datetime != undefined && (irms || power))
+							.map(({ datetime, irms, power }) => {
+								const arrayFechaCompleta = datetime.split(" ");
+								const arrayFecha = arrayFechaCompleta[0].split("/");
+								const arrayHora = arrayFechaCompleta[1].split(":");
+
+								const fecha = moment(new Date(arrayFecha[2], arrayFecha[1], arrayFecha[0], arrayHora[0], arrayHora[1], arrayHora[2]));
+								fecha.add(53, 'years');
+								fecha.add(3, 'months');
+								fecha.add(25, 'days');
+
+								return {
+									fecha: fecha.format("YYYY-MM-DD HH:mm:ss"),
+									irms,
+									potencia: power
+								};
+							});
+						console.log("dataConsumo2", newDataConsumo)
+						pintarGrafica2(newDataConsumo);
+					}
+
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		function pintarGrafica2(dataConsumo) {
+
+			const etiquetas = [];
+			const potencia = [];
+			const irms = [];
+			dataConsumo.forEach(element => {
+				etiquetas.push(element.fecha);
+				potencia.push(element.potencia);
+				irms.push(element.irms);
+			});
+
+			// sumamos todas las potencias para luego obtener el promedio
+			const sumatoria = potencia.reduce(function (a, b) {
+				return a + b;
+			}, 0);
+
+			calculosGrafica2.promedioPotencia = (sumatoria / potencia.length).toFixed(3);
+			$("#g2promedioPotencia").html(calculosGrafica2.promedioPotencia);
+
+			// calculamos la fecha inicial y final para luego obtener la diferencia en horas
+			const fecha1 = moment(etiquetas[0], "YYYY-MM-DD HH:mm:ss");
+			const fecha2 = moment(etiquetas[etiquetas.length - 1], "YYYY-MM-DD HH:mm:ss");
+
+			calculosGrafica2.tiempoTranscurrido = fecha2.diff(fecha1, 'h'); // Diff in hours
+			$("#g2tiempoTranscurrido").html(calculosGrafica2.tiempoTranscurrido);
+
+			// calculamos el consulo total normal multiplicando las horas por el dato de consumo por hora del electrodomestico
+			calculosGrafica2.consumoTotal = (calculosGrafica2.tiempoTranscurrido * calculosGrafica2.watsHora).toFixed(3);
+			$("#g2consumoTotal").html(calculosGrafica2.consumoTotal);
+
+			// calculamos el consumo acorde al promedio de potencia por hora
+			calculosGrafica2.consumoPorPotencia = (calculosGrafica2.consumoTotal * calculosGrafica2.promedioPotencia).toFixed(3);
+			$("#g2consumoPorPotencia").html(calculosGrafica2.consumoPorPotencia);
+
+			const datosPotenciaGrafica2 = {
+				label: "Potencia",
+				data: potencia,
+				backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
+				borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+				borderWidth: 1,// Ancho del borde
+			};
+
+			const datosIrmsGrafica2 = {
+				label: "IRMS",
+				data: irms,
+				backgroundColor: 'rgba(34, 62, 135, 0.3)', // Color de fondo
+				borderColor: 'rgba(34, 62, 135, 1)', // Color del borde
+				borderWidth: 1,// Ancho del borde
+			};
+
+			// Obtener una referencia al elemento canvas del DOM
+			const $grafica2 = $("#grafica2");
+
+			new Chart($grafica2, {
+				type: 'line',
+				data: {
+					labels: etiquetas,
+					datasets: [
+						datosPotenciaGrafica2,
+						datosIrmsGrafica2
+						// Aquí más datos...
+					]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}],
+					},
+				}
+			});
+		}
+		
+		function cargarDataGrafica3() {
+
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/{{idElectrodomestico}}/consumo3",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+					const dataConsumo3 = Object.values(response);
+					if (dataConsumo3) {
+						const newDataConsumo = dataConsumo3
+							.filter(({ datetime, irms, power }) => datetime != undefined && (irms || power))
+							.map(({ datetime, irms, power }) => {
+								const arrayFechaCompleta = datetime.split(" ");
+								const arrayFecha = arrayFechaCompleta[0].split("/");
+								const arrayHora = arrayFechaCompleta[1].split(":");
+
+								const fecha = moment(new Date(arrayFecha[2], arrayFecha[1], arrayFecha[0], arrayHora[0], arrayHora[1], arrayHora[2]));
+								fecha.add(53, 'years');
+								fecha.add(3, 'months');
+								fecha.add(25, 'days');
+
+								return {
+									fecha: fecha.format("YYYY-MM-DD HH:mm:ss"),
+									irms,
+									potencia: power
+								};
+							});
+						console.log("dataConsumo3", newDataConsumo)
+						pintarGrafica3(newDataConsumo);
+					}
+
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		function pintarGrafica3(dataConsumo) {
+
+			const etiquetas = [];
+			const potencia = [];
+			const irms = [];
+			dataConsumo.forEach(element => {
+				etiquetas.push(element.fecha);
+				potencia.push(element.potencia);
+				irms.push(element.irms);
+			});
+
+			// sumamos todas las potencias para luego obtener el promedio
+			const sumatoria = potencia.reduce(function (a, b) {
+				return a + b;
+			}, 0);
+
+			calculosGrafica3.promedioPotencia = (sumatoria / potencia.length).toFixed(3);
+			$("#g3promedioPotencia").html(calculosGrafica3.promedioPotencia);
+
+			// calculamos la fecha inicial y final para luego obtener la diferencia en horas
+			const fecha1 = moment(etiquetas[0], "YYYY-MM-DD HH:mm:ss");
+			const fecha2 = moment(etiquetas[etiquetas.length - 1], "YYYY-MM-DD HH:mm:ss");
+
+			calculosGrafica3.tiempoTranscurrido = fecha2.diff(fecha1, 'h'); // Diff in hours
+			$("#g3tiempoTranscurrido").html(calculosGrafica3.tiempoTranscurrido);
+
+			// calculamos el consulo total normal multiplicando las horas por el dato de consumo por hora del electrodomestico
+			calculosGrafica3.consumoTotal = (calculosGrafica3.tiempoTranscurrido * calculosGrafica3.watsHora).toFixed(3);
+			$("#g3consumoTotal").html(calculosGrafica3.consumoTotal);
+
+			// calculamos el consumo acorde al promedio de potencia por hora
+			calculosGrafica3.consumoPorPotencia = (calculosGrafica3.consumoTotal * calculosGrafica3.promedioPotencia).toFixed(3);
+			$("#g3consumoPorPotencia").html(calculosGrafica3.consumoPorPotencia);
+
+			const datosPotenciaGrafica3 = {
+				label: "Potencia",
+				data: potencia,
+				backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
+				borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
+				borderWidth: 1,// Ancho del borde
+			};
+
+			const datosIrmsGrafica3 = {
+				label: "IRMS",
+				data: irms,
+				backgroundColor: 'rgba(34, 62, 135, 0.3)', // Color de fondo
+				borderColor: 'rgba(34, 62, 135, 1)', // Color del borde
+				borderWidth: 1,// Ancho del borde
+			};
+
+			// Obtener una referencia al elemento canvas del DOM
+			const $grafica3 = $("#grafica3");
+
+			new Chart($grafica3, {
+				type: 'line',
+				data: {
+					labels: etiquetas,
+					datasets: [
+						datosPotenciaGrafica3,
+						datosIrmsGrafica3
 						// Aquí más datos...
 					]
 				},
