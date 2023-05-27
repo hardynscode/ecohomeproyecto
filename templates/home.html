@@ -13,7 +13,7 @@
         Cargando...
     </div>
     <div class="row" style="margin-top: 30px;">
-        <a href="addhome" class="btn btn-success d-lg-block">Agregar una nueva casa</a>
+        <a href="addhome" class="btn btn-success d-lg-block">+ Agregar una nueva casa</a>
     </div>
 </div>
 {% endblock %}
@@ -50,13 +50,13 @@
                     for (let index = 0; index < houses.length; index++) {
                         const home = houses[index];
 
-                        content += "<div class='col-md-4 col-sm-6'> " +
-                            "<img class='img-fluid' src='../img/eco-house-logo.png' alt=''>" +
+                        content += "<div class='col-md-3 col-xs-2 col-sm-6 col-lg-3'> " +
+                            "<img class='img-fluid' src='/static/img/eco-house-logo.png' alt='' width='180px' >" +
                             "<div class='service-wrapper'>" +
-                            "<h3><i class='fa fa-home'></i> Casa N° " + (index + 1) + "</h3>" +
+                            "<h3>Casa N° " + (index + 1) + "</h3>" +
                             "<p>" + home.nombre + "</p>" +
-                            "<p><a href='detailshome?idCasa=" + home.nombre + "' class='btn text-center'><i class='fa fa-eye'></i> Ver</a></br>"+
-                                "<span>" + home.estado + "</span>" +
+                            "<p><a href='detailshome?idCasa=" + home.nombre + "' class='btn btn-info text-center'><i class='fa fa-eye'></i> Ver</a></br>"+
+                                "<span>Estado: " + home.estado + "</span>" +
                                 "</p>" +
                             "</div>" +
                             "</div>";

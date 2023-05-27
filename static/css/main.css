@@ -58,3 +58,7 @@ a {
 .mr-2 {
     margin-right: 12px;
 }
+
+.text-small {
+    font-size: 12px !important;
+}

@@ -19,50 +19,42 @@
 <section class="vh-50 ">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-10 offset-lg-1">
-
+			<div class="col-lg-12">
 				<div class="bg-white shadow rounded">
 					<div class="row">
-						<div class="col-md-8 pe-0">
-							<div class="form-left h-100 py-5 px-5">
+						<div class="col-md-4">
+							<div class="form-left h-100 py-5 px-2">
 								<form class="row g-4" id="form-edicion-electrodomestico">
 									<div class="col-12">
-										<label>Tipo de Electrodomestico<span class="text-danger"
-												for="tipoElectrodomestico">*</span></label>
-										<select class="form-control" id="tipoElectrodomestico"
-											name="tipoElectrodomestico" required>
+										<label>Tipo de Electrodomestico</label>
+										<select class="form-control text-small" id="tipoElectrodomestico"
+											name="tipoElectrodomestico" disabled>
 										</select>
 									</div>
 
 									<div class="col-12">
-										<label>Tipo de Eficiencia <span class="text-danger"
-												for="tipoEficiencia">*</span></label>
-										<select class="form-control" id="tipoEficiencia" name="tipoEficiencia" required>
+										<label>Tipo de Eficiencia</label>
+										<select class="form-control text-small" id="tipoEficiencia"
+											name="tipoEficiencia" disabled>
 										</select>
 									</div>
 
 									<div class="col-12">
-										<label>Consumo por mes (kWh / mes) <span class="text-danger"
-												for="kwhMes">*</span></label>
-										<input type="number" class="form-control" id="kwhMes" required>
+										<label>Consumo por mes (kWh / mes)</label>
+										<input type="number" class="form-control text-small" id="kwhMes" disabled>
 									</div>
 
 									<div class="col-12">
-										<label>Tomacorriente Actual <span class="text-danger"
-												for="tomacorrienteActual">*</span></label>
-										<select class="form-control" id="tomacorrienteActual" name="tomacorrienteActual"
-											required>
+										<label>Tomacorriente Actual</label>
+										<select class="form-control text-small" id="tomacorrienteActual"
+											name="tomacorrienteActual" disabled>
 										</select>
-										<p class="text text-danger d-none" id="sin-tomas">No hay tomacorrientes
-											registrados en esta casa
-											<a href="/detailshome/{{idCasa}}/tomacorrientes/new">Agregar</a>
-										</p>
 									</div>
 
 									<div class="col-12">
-										<label>Estado de Conexion<span class="text-danger"
-												for="estadoConexion">*</span></label>
-										<select class="form-control" id="estadoConexion" name="estadoConexion" required>
+										<label>Estado de Conexion</label>
+										<select class="form-control text-small" id="estadoConexion"
+											name="estadoConexion" disabled>
 											<option value="conectado">Conectado</option>
 											<option value="desconectado">Desconectado</option>
 										</select>
@@ -71,17 +63,35 @@
 								</form>
 							</div>
 						</div>
-						<div class="col-md-4 ps-0 d-none d-md-block">
-							<div class="form-right h-100 bg-transparent text-black text-center pt-5">
+						<div class="col-md-8">
+							<div class="py-5 px-1">
+								<canvas id="grafica"></canvas>
+							</div>
+							<div class="form-rigth center h-100 pb-5 px-5 col-md-12">
+								<h3>Calculos</h3>
+								<div class="col-lg-7 pb-2">
+									<label>Consumo por hora (Wh)</label>
+									<input type="number" class="form-control text-small" id="watsHora" disabled>
+								</div>
+								<div class="col-lg-7 pb-2">
+									<label>Tiempo Transcurrido (Horas)</label>
+									<input type="number" class="form-control text-small" id="tiempoTranscurrido" disabled>
+								</div>
+								<div class="col-lg-7 pb-2">
+									<label>Consumo Total (Wh)</label>
+									<input type="number" class="form-control text-small" id="consumoTotal" disabled>
+								</div>
+								<div class="col-lg-7 pb-2">
+									<label>Potencia Promedio (vatios)</label>
+									<input type="number" class="form-control text-small" id="promedioPotencia" disabled>
+								</div>
+								<div class="col-lg-7 pb-2">
+									<label>Consumo x Potencia Promedio = Consumo Real</label>
+									<input type="number" class="form-control text-small" id="consumoPorPotencia" disabled>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<p class="text-end text-secondary mt-3"></p>
-			</div>
-			<div class="col-lg-10 offset-lg-1">
-				<div class="bg-white shadow rounded">
-					<canvas id="grafica"></canvas>
 				</div>
 			</div>
 		</div>
@@ -92,6 +102,7 @@
 {% block scripts %}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+<script type="text/javascript" src="/static/js/moment.min.js"></script>
 
 <script type="text/javascript">
 
@@ -103,6 +114,7 @@
 	}
 
 	let dataElectrodomestico = null;
+	let dataConsumo = null;
 
 	// obtenemos la informacion del usuario del local storage
 	const usuarioLogueado = JSON.parse(localStorage.getItem('user-ecohome'));
@@ -221,7 +233,7 @@
 
 					$("#tipoElectrodomestico").html(content);
 
-					cargarElectrodomesticoParaEditar();
+					cargarElectrodomestico();
 				},
 				error: function (response) {
 					console.log(response.responseJSON.message);
@@ -229,7 +241,7 @@
 			});
 		}
 
-		function cargarElectrodomesticoParaEditar() {
+		function cargarElectrodomestico() {
 			$.ajax({
 				type: "GET",
 				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/{{idElectrodomestico}}",
@@ -240,10 +252,14 @@
 
 					dataElectrodomestico = response;
 
-					console.log("data", dataElectrodomestico);
-
 					$("#estadoConexion").val(dataElectrodomestico.estadoConexion);
 					$('#kwhMes').val(dataElectrodomestico.kwhMes);
+
+					const horasMes = 730;
+					const watsMes = dataElectrodomestico.kwhMes * 1000;
+					const watsHora = watsMes / horasMes;
+					$("#watsHora").val(watsHora);
+
 					$("#tipoEficiencia").val(dataElectrodomestico.tipoEficiencia);
 					$("#tipoElectrodomestico").val(dataElectrodomestico.tipoElectrodomestico);
 					$("#tomacorrienteActual").val(dataElectrodomestico.tomacorrienteActual);
@@ -257,18 +273,62 @@
 		}
 
 		function cargarDataConsumo() {
-			const etiquetas = ["2023-05-25 06:00 pm", "2023-05-25 06:10 pm", "2023-05-25 06:20 pm", "2023-05-25 06:30 pm"];
+
+			$.ajax({
+				type: "GET",
+				url: "http://127.0.0.1:5000/api/users/" + identificacion + "/houses/{{idCasa}}/electrodomesticos/{{idElectrodomestico}}/consumo",
+				dataType: "json",
+				contentType: "application/json; charset=utf-8",
+				async: true,
+				success: function (response) {
+					dataConsumo = response;
+					pintarGrafica(dataConsumo);
+				},
+				error: function (response) {
+					console.log(response.responseJSON.message);
+				}
+			});
+		}
+
+		function pintarGrafica(dataConsumo) {
+
+			const etiquetas = [];
+			const potencia = [];
+			dataConsumo.forEach(element => {
+				etiquetas.push(element.fecha);
+				potencia.push(element.potencia);
+			});
+
+			const sumatoria = potencia.reduce(function (a, b) {
+				return a + b;
+			}, 0);
+			const promedioPotencia = sumatoria / potencia.length;
+			$("#promedioPotencia").val(promedioPotencia);
+
+
+			const fecha1 = moment(etiquetas[0], "YYYY-MM-DD HH:mm:ss");
+			const fecha2 = moment(etiquetas[etiquetas.length - 1], "YYYY-MM-DD HH:mm:ss");
+
+			const horasTranscurridas = fecha2.diff(fecha1, 'h'); // Diff in hours
+			$("#tiempoTranscurrido").val(horasTranscurridas);
+
+			const consumoTotal = horasTranscurridas * $("#watsHora").val();
+			$("#consumoTotal").val(consumoTotal);
+
+			const consumoPorPotencia = consumoTotal * promedioPotencia;
+			$("#consumoPorPotencia").val(consumoPorPotencia);
+
 			const datosVentas2020 = {
 				label: "Potencia",
-				data: [0.98, 0.22, 0.36, 0.45], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
+				data: potencia,
 				backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
 				borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
 				borderWidth: 1,// Ancho del borde
 			};
 
 			// Obtener una referencia al elemento canvas del DOM
-			const $grafica = $("#grafica");			
-		
+			const $grafica = $("#grafica");
+
 			new Chart($grafica, {
 				type: 'line',// Tipo de gráfica
 				data: {
